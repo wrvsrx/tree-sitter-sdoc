@@ -12,3 +12,5 @@
 ] @punctuation.bracket
 (paragraph) @spell
 (list_marker) @markup.list
+(emphasis) @markup.italic
+(strong) @markup.strong

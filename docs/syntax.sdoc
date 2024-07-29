@@ -24,3 +24,5 @@
 {p sdoc 支持注释，注释必须以 block 形式出现，例如
 }
 {% 这是注释}
+{p sdoc 支持 emphasis 跟 strong，例如{_ 这是 emphasis}，{* 这是 strong}。
+}

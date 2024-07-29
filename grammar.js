@@ -22,12 +22,16 @@ module.exports = grammar({
 
     heading_content: ($) => repeat1($._inline),
 
-    _inline: ($) => choice($.word, $.softbreak),
+    _inline: ($) => choice($.word, $.softbreak, $.emphasis, $.strong),
+    emphasis: ($) => seq('{', $.emphasis_marker, repeat($._inline), '}'),
+    strong: ($) => seq('{', $.strong_marker, repeat($._inline), '}'),
 
     word: (_) => /([^ {}]|\\\{|\\\})+/,
     meta_name: (_) => /([^ {}]|\\\{|\\\})+/,
     softbreak: (_) => '\n',
     list_marker: (_) => token.immediate('-'),
     heading_marker: (_) => token.immediate('#'),
+    emphasis_marker: (_) => token.immediate('_'),
+    strong_marker: (_) => token.immediate('*'),
   },
 });
