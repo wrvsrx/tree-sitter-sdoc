@@ -18,7 +18,7 @@ module.exports = grammar({
 
     _inline: ($) => choice($.word, $.softbreak),
 
-    word: (_) => /[^ {}]+/,
+    word: (_) => /([^ {}]|\\\{|\\\})+/,
     softbreak: (_) => '\n',
   },
 });

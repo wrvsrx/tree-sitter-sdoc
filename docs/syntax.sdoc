@@ -1,6 +1,7 @@
 {|
   {# 语法说明}
   {p 每篇 sdoc 文章由一系列 block 构成，block 有这些种类
+     paragraph 可以有 softbreak
   }
   {l
     {- paragraph
@@ -12,6 +13,6 @@
     {- heading
     }
   }
-  {p 每篇 sdoc 的开头可以有一些 metadata 之类的
+  {p sdoc 也支持转义，转义用 \{\} 来表示
   }
 }
