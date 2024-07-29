@@ -15,9 +15,14 @@
         systems = [ "x86_64-linux" ];
         perSystem =
           { pkgs, ... }:
+          let
+            inherit (pkgs) callPackage;
+          in
           {
-            packages.default = pkgs.callPackage ./default.nix { };
-            devShells.default = pkgs.callPackage ./shell.nix { };
+            packages = rec {
+              generated-src = callPackage ./generated-src.nix { };
+              default = callPackage ./. { inherit generated-src; };
+            };
             formatter = pkgs.nixfmt-rfc-style;
           };
       }
