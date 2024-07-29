@@ -1,4 +1,14 @@
-(heading) @markup.heading
+(
+  (comment) @comment
+  (#set! "priority" 110)
+)
+[
+  (heading_marker)
+  (heading_content)
+] @markup.heading
+[
+  "{"
+  "}"
+] @punctuation.bracket
 (paragraph) @spell
-(comment) @comment
 (list_marker) @markup.list
