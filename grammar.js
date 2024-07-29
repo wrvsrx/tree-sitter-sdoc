@@ -14,12 +14,13 @@ module.exports = grammar({
     section: ($) => seq('{|', optional($.heading), repeat($._block), '}'),
     heading: ($) => seq('{#', repeat($._inline), '}'),
     list: ($) => seq('{l', repeat($.listitem), '}'),
-    listitem: ($) => seq('{-', optional(choice(repeat($._block), repeat($._inline))), '}'),
-    comment: (_) => seq('{%', /([^{}]|\\\}|\\\{)+/ , '}'),
+    listitem: ($) => seq('{', $.list_marker, optional(choice(repeat($._block), repeat($._inline))), '}'),
+    comment: (_) => seq('{%', /([^{}]|\\\}|\\\{)+/, '}'),
 
     _inline: ($) => choice($.word, $.softbreak),
 
     word: (_) => /([^ {}]|\\\{|\\\})+/,
     softbreak: (_) => '\n',
+    list_marker: (_) => token.immediate('-'),
   },
 });

@@ -1,7 +1,6 @@
 {|
   {# 语法说明}
-  {p 每篇 sdoc 文章由一系列 block 构成，block 有这些种类
-     paragraph 可以有 softbreak
+  {p 每篇 sdoc 文章由一系列 block 构成，block 有这些种类。看起来其实感觉还行，而且缩进不影响结果。
   }
   {l
     {- paragraph
