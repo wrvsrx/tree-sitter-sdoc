@@ -1,18 +1,26 @@
-{|
-  {# 语法说明}
-  {p 每篇 sdoc 文章由一系列 block 构成，block 有这些种类。看起来其实感觉还行，而且缩进不影响结果。
-  }
-  {l
-    {- paragraph
-    }
-    {- section
-    }
-    {- list
-    }
-    {- heading
+{meta
+  {title sdoc 语法说明}
+  {tags
+    {l
+      {- doc}
     }
   }
-  {p sdoc 也支持转义，转义用 \{\} 来表示
-  }
-  {% 这是注释}
 }
+
+{p 每篇 sdoc 文章由一系列 block 构成，block 有这些种类。看起来其实感觉还行，而且缩进不影响结果。
+}
+{l
+  {- paragraph
+  }
+  {- section
+  }
+  {- list
+  }
+  {- heading
+  }
+}
+{p sdoc 支持转义，转义用 \{\} 来表示
+}
+{p sdoc 支持注释，注释必须以 block 形式出现，例如
+}
+{% 这是注释}

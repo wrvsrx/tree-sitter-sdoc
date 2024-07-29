@@ -6,7 +6,10 @@ module.exports = grammar({
   ],
 
   rules: {
-    document: ($) => repeat($._block),
+    document: ($) => seq(optional($.meta), repeat($._block)),
+
+    meta: ($) => seq('{', token.immediate('meta'), repeat($.meta_block), '}'),
+    meta_block: ($) => seq('{', $.meta_name, choice(repeat($._inline), repeat($._block)), '}'),
 
     _block: ($) => choice($.paragraph, $.section, $.heading, $.list, $.comment),
 
@@ -22,6 +25,7 @@ module.exports = grammar({
     _inline: ($) => choice($.word, $.softbreak),
 
     word: (_) => /([^ {}]|\\\{|\\\})+/,
+    meta_name: (_) => /([^ {}]|\\\{|\\\})+/,
     softbreak: (_) => '\n',
     list_marker: (_) => token.immediate('-'),
     heading_marker: (_) => token.immediate('#'),
