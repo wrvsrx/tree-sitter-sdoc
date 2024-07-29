@@ -14,3 +14,4 @@
 (list_marker) @markup.list
 (emphasis) @markup.italic
 (strong) @markup.strong
+(meta_name) @variable.member
