@@ -1,0 +1,10 @@
+{meta
+  {title sdoc todo}
+}
+
+{l
+   {- [ ] add todo
+  }{- [ ] parse space as inline
+  }{- [ ] parse softbreak as inline
+  }
+}
