@@ -19,12 +19,8 @@
             inherit (pkgs) callPackage;
           in
           rec {
-            packages = rec {
-              generated-src = callPackage ./generated-src.nix { };
-              default = callPackage ./. { inherit generated-src; };
-              vimplugin-treesitter-grammar-sdoc = pkgs.neovimUtils.grammarToPlugin default;
-            };
-            devShells.default = pkgs.mkShell { inputsFrom = [ packages.default ]; };
+            packages = callPackage ./. { };
+            devShells.default = pkgs.mkShell { inputsFrom = [ packages.tree-sitter-sdoc ]; };
             formatter = pkgs.nixfmt-rfc-style;
           };
       }
