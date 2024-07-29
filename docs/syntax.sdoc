@@ -1,2 +1,17 @@
-{p 每个 sdoc 文章由一系列 block 构成
+{|
+  {# 语法说明}
+  {p 每篇 sdoc 文章由一系列 block 构成，block 有这些种类
+  }
+  {l
+    {- paragraph
+    }
+    {- section
+    }
+    {- list
+    }
+    {- heading
+    }
+  }
+  {p 每篇 sdoc 的开头可以有一些 metadata 之类的
+  }
 }
