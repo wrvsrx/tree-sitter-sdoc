@@ -20,3 +20,5 @@
 (meta_name) @variable.member
 (paragraph_marker) @type.builtin
 (list_marker) @type.builtin
+(todo_marker) @markup.list.unchecked
+(done_marker) @markup.list.checked

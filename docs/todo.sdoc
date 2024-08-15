@@ -3,8 +3,8 @@
 }
 
 {l
-   {- [ ] add todo
-  }{- [ ] parse space as inline
-  }{- [ ] parse softbreak as inline
+   {- {done add todo}
+  }{- {~ parse space as inline}
+  }{- {done parse softbreak as inline}
   }
 }

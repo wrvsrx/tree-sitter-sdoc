@@ -16,6 +16,7 @@ module.exports = grammar({
       $.section,
       $.heading,
       $.list,
+      $.todo,
       $.comment,
     ),
 
@@ -23,9 +24,12 @@ module.exports = grammar({
     section: ($) => seq('{', $.section_marker, optional($.heading), repeat($._block), '}'),
     heading: ($) => seq('{', $.heading_marker, optional($.heading_content), '}'),
     list: ($) => seq('{', $.list_marker, repeat($.listitem), '}'),
-    listitem: ($) => seq('{', $.listitem_marker, optional(choice(repeat($._block), repeat($._inline))), '}'),
+    listitem: ($) => seq('{', $.listitem_marker, optional($._blocks_or_inlines), '}'),
     comment: (_) => seq('{%', /([^{}]|\\\}|\\\{)+/, '}'),
     heading_content: ($) => repeat1($._inline),
+    todo: ($) => seq('{', choice($.todo_marker, $.done_marker), optional($._blocks_or_inlines), '}'),
+
+    _blocks_or_inlines: ($) => choice(repeat1($._block), repeat1($._inline)),
 
     _inline: ($) => choice(
       $.word,
@@ -50,5 +54,7 @@ module.exports = grammar({
     strong_marker: (_) => token.immediate('*'),
     strike_marker: (_) => token.immediate('~'),
     meta_marker: (_) => token.immediate('meta'),
+    todo_marker: (_) => token.immediate('todo'),
+    done_marker: (_) => token.immediate('done'),
   },
 });
