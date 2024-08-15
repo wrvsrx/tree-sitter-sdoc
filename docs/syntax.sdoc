@@ -21,5 +21,13 @@
 {p sdoc 支持注释，注释必须以 block 形式出现，例如
 }
 {% 这是注释}
-{p sdoc 支持 emphasis 跟 strong，例如{_ 这是 emphasis}，{* 这是 strong}。
+{p sdoc 支持 emphasis、strong 跟 strikethrough，例如：
+}
+{l
+   {- {_ emphasis}
+  }{- {* strong}
+  }{- {~ strikethrough}
+  }
+}
+{p sdoc 支持在开头加入 metadata，每个 metadata 的值可以是一串 block，也可以是一串 inline，见本文档开头。
 }
