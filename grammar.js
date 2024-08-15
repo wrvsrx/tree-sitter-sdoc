@@ -16,7 +16,7 @@ module.exports = grammar({
       $.section,
       $.heading,
       $.list,
-      $.todo,
+      $.todo_block,
       $.comment,
     ),
 
@@ -27,7 +27,7 @@ module.exports = grammar({
     listitem: ($) => seq('{', $.listitem_marker, optional($._blocks_or_inlines), '}'),
     comment: (_) => seq('{%', /([^{}]|\\\}|\\\{)+/, '}'),
     heading_content: ($) => repeat1($._inline),
-    todo: ($) => seq('{', choice($.todo_marker, $.done_marker), optional($._blocks_or_inlines), '}'),
+    todo_block: ($) => seq('{', choice($.todo_block_marker, $.done_block_marker), optional($._blocks_or_inlines), '}'),
 
     _blocks_or_inlines: ($) => choice(repeat1($._block), repeat1($._inline)),
 
@@ -37,10 +37,16 @@ module.exports = grammar({
       $.emphasis,
       $.strong,
       $.strikethrough,
+      $.todo_inline,
+      $.link,
     ),
     emphasis: ($) => seq('{', $.emphasis_marker, repeat($._inline), '}'),
     strong: ($) => seq('{', $.strong_marker, repeat($._inline), '}'),
     strikethrough: ($) => seq('{', $.strike_marker, repeat($._inline), '}'),
+    todo_inline: ($) => seq('{', choice($.todo_inline_marker, $.done_inline_marker), repeat($._inline), '}'),
+    link: ($) => seq('{', $.link_marker, optional(/[ \n\r]+/), optional($.link_label), optional(/[ \n\r]+/), $.link_target, '}'),
+    link_label: ($) => seq('{', token.immediate('[]'), repeat($._inline), '}'),
+    link_target: (_) => /[^\{\}]+/,
 
     word: (_) => /([^ {}]|\\\{|\\\})+/,
     meta_name: (_) => /([^ {}]|\\\{|\\\})+/,
@@ -54,7 +60,10 @@ module.exports = grammar({
     strong_marker: (_) => token.immediate('*'),
     strike_marker: (_) => token.immediate('~'),
     meta_marker: (_) => token.immediate('meta'),
-    todo_marker: (_) => token.immediate('todo'),
-    done_marker: (_) => token.immediate('done'),
+    todo_block_marker: (_) => token.immediate('todo'),
+    done_block_marker: (_) => token.immediate('done'),
+    todo_inline_marker: (_) => token.immediate('o'),
+    done_inline_marker: (_) => token.immediate('x'),
+    link_marker: (_) => token.immediate('/'),
   },
 });

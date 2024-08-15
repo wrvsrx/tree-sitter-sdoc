@@ -20,5 +20,9 @@
 (meta_name) @variable.member
 (paragraph_marker) @type.builtin
 (list_marker) @type.builtin
-(todo_marker) @markup.list.unchecked
-(done_marker) @markup.list.checked
+(todo_block_marker) @markup.list.unchecked
+(done_block_marker) @markup.list.checked
+(todo_inline_marker) @markup.list.unchecked
+(done_inline_marker) @markup.list.checked
+(link_label) @markup.link.label
+(link_target) @markup.link.url
