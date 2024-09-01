@@ -15,6 +15,13 @@
 
     Quote is continued using indent.
 
+- todo
+
+  sdoc support set todo and done items
+
+  [ ] This is todo item
+  [x] This is done item
+
 # Inline level
 
 - {* emphasis}

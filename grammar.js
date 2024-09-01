@@ -11,6 +11,7 @@ module.exports = grammar({
     _block: ($) => choice(
       $.paragraph,
       $.list,
+      $.tasklist,
       $.heading,
       $.emptyline,
       $.quote,
@@ -20,6 +21,13 @@ module.exports = grammar({
     list: ($) => prec.right(repeat1($.listitem)),
     listitem: ($) => seq(
       $.listitem_marker,
+      $._indent_at_here,
+      repeat($._block),
+      $._dedent,
+    ),
+    tasklist: ($) => prec.right(repeat1($.tasklistitem)),
+    tasklistitem: ($) => seq(
+      choice($.tasklistitem_done_marker, $.tasklistitem_todo_marker),
       $._indent_at_here,
       repeat($._block),
       $._dedent,
@@ -44,6 +52,8 @@ module.exports = grammar({
     emphasis: ($) => seq('{*', repeat($._inline), '}'),
 
     listitem_marker: (_) => token(prec(1, /- +/)),
+    tasklistitem_todo_marker: (_) => token(prec(1, '[ ]')),
+    tasklistitem_done_marker: (_) => token(prec(1, '[x]')),
     heading_marker: (_) => token(prec(1, /# +/)),
     quote_marker: (_) => token(prec(1, /> +/)),
     str: (_) => /([^{}\n\\]|\\\{|\\\}|\\)+/,

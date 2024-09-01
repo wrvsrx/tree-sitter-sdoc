@@ -1,7 +1,10 @@
 # sdoc todo
 
-- todo
-- link
-- math
-- verbatim
-- attribute
+[x] todo
+[ ] link
+[ ] math
+[ ] verbatim
+[ ] attribute
+[ ] strong
+[ ] strikethrough
+[ ] comments
