@@ -15,6 +15,7 @@ module.exports = grammar({
       $.list,
       $.heading,
       $.emptyline,
+      $.quote,
     ),
 
     paragraph: ($) => seq(repeat1($._inline), $._paragraph_end),
@@ -30,6 +31,12 @@ module.exports = grammar({
       repeat($._inline),
       '\n',
     ),
+    quote: ($) => seq(
+      $.quote_marker,
+      $._indent_at_here,
+      repeat($._block),
+      $._dedent,
+    ),
 
     _inline: ($) => choice(
       $.str,
@@ -40,6 +47,7 @@ module.exports = grammar({
 
     listmark: (_) => token(prec(1, /- +/)),
     heading_marker: (_) => token(prec(1, /# +/)),
+    quote_marker: (_) => token(prec(1, /> +/)),
     str: (_) => /([^{}\n\\]|\\\{|\\\}|\\)+/,
     _paragraph_end: (_) => '\n',
   },
