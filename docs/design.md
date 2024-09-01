@@ -2,7 +2,7 @@ We want to develop a language like djot with a unified grammar at block level an
 
 # Block level
 
-We end blocks by emptyline(`\n\n+`).
+We end blocks by emptyline(`\n\n+`) or dedent or eof.
 
 Characters at block start have speical meaning for block, even for space. So this language should be indent sensitive.
 
@@ -13,6 +13,7 @@ Characters at block start have speical meaning for block, even for space. So thi
   - sadf
 
   - asdf
+
 lkjl
 
 
