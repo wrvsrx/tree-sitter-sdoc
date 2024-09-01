@@ -3,26 +3,18 @@ module.exports = grammar({
 
   extras: ($) => [$._ignored],
 
-  conflicts: (_) => [],
+  conflicts: ($) => [
+    [$.list],
+  ],
 
   rules: {
-    document: ($) => seq(
-      repeat($.emptyline),
-      optional(seq(
-        $._block,
-        repeat(seq(
-          repeat1($.emptyline),
-          $._block,
-        )),
-        // we can have trailing emptylines
-        repeat($.emptyline),
-      )),
-    ),
+    document: ($) => repeat($._block),
 
     _block: ($) => choice(
       $.paragraph,
       $.list,
       $.heading,
+      $.emptyline,
     ),
 
     paragraph: ($) => seq(repeat1($._inline), $._paragraph_end),
@@ -30,12 +22,7 @@ module.exports = grammar({
     listitem: ($) => seq(
       $.listmark,
       $._indent_at_here,
-      $._block,
-      repeat(seq(
-        repeat1($.emptyline),
-        $._block,
-      )),
-      repeat($.emptyline),
+      repeat($._block),
       $._dedent,
     ),
     heading: ($) => seq(
