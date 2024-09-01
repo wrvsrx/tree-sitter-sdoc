@@ -22,6 +22,8 @@
   [ ] This is todo item
   [x] This is done item
 
+      We can write explanation for todo item using indent.
+
 # Inline level
 
 - {* strong}
