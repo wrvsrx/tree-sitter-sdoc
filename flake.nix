@@ -20,7 +20,12 @@
           in
           rec {
             packages = callPackage ./. { };
-            devShells.default = pkgs.mkShell { inputsFrom = [ packages.generated-src ]; };
+            devShells.default = pkgs.mkShell {
+              inputsFrom = [
+                packages.tree-sitter-sdoc
+                packages.generated-src
+              ];
+            };
             formatter = pkgs.nixfmt-rfc-style;
           };
       }
