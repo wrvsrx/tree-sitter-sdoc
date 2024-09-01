@@ -48,8 +48,12 @@ module.exports = grammar({
       $.str,
       $.softbreak,
       $.emphasis,
+      $.strong,
+      $.strikethrough,
     ),
-    emphasis: ($) => seq('{*', repeat($._inline), '}'),
+    emphasis: ($) => seq('{_', repeat($._inline), '}'),
+    strong: ($) => seq('{*', repeat($._inline), '}'),
+    strikethrough: ($) => seq('{~', repeat($._inline), '}'),
 
     listitem_marker: (_) => token(prec(1, /- +/)),
     tasklistitem_todo_marker: (_) => token(prec(1, '[ ]')),

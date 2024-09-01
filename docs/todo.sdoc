@@ -5,6 +5,6 @@
 [ ] math
 [ ] verbatim
 [ ] attribute
-[ ] strong
-[ ] strikethrough
+[x] strong
+[x] strikethrough
 [ ] comments

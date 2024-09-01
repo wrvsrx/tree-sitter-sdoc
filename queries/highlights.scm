@@ -2,6 +2,8 @@
 (paragraph) @spell
 (listitem_marker) @markup.list
 (emphasis) @markup.italic
+(strong) @markup.strong
+(strikethrough) @markup.strikethrough
 (quote) @markup.quote
 (quote_marker) @punctuation.special
 (tasklistitem_todo_marker) @markup.list.unchecked
