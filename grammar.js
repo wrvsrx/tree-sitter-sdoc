@@ -38,10 +38,15 @@ module.exports = grammar({
       $._dedent,
     ),
 
-    _inline: ($) => choice($.str, $.softbreak),
+    _inline: ($) => choice(
+      $.str,
+      $.softbreak,
+      $.emphasis,
+    ),
+    emphasis: ($) => seq('{*', repeat($._inline), '}'),
 
     listmark: (_) => token(prec(1, /- +/)),
-    str: (_) => /.+/,
+    str: (_) => /([^{}\n\\]|\\\{|\\\}|\\)+/,
     _paragraph_end: (_) => '\n',
   },
 
