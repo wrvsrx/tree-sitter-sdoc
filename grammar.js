@@ -3,9 +3,7 @@ module.exports = grammar({
 
   extras: ($) => [$._ignored],
 
-  conflicts: ($) => [
-    [$.list],
-  ],
+  conflicts: (_) => [],
 
   rules: {
     document: ($) => repeat($._block),
@@ -19,7 +17,7 @@ module.exports = grammar({
     ),
 
     paragraph: ($) => seq(repeat1($._inline), $._paragraph_end),
-    list: ($) => repeat1($.listitem),
+    list: ($) => prec.right(repeat1($.listitem)),
     listitem: ($) => seq(
       $.listmark,
       $._indent_at_here,
