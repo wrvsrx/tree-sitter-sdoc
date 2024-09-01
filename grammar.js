@@ -19,7 +19,7 @@ module.exports = grammar({
     paragraph: ($) => seq(repeat1($._inline), $._paragraph_end),
     list: ($) => prec.right(repeat1($.listitem)),
     listitem: ($) => seq(
-      $.listmark,
+      $.listitem_marker,
       $._indent_at_here,
       repeat($._block),
       $._dedent,
@@ -43,7 +43,7 @@ module.exports = grammar({
     ),
     emphasis: ($) => seq('{*', repeat($._inline), '}'),
 
-    listmark: (_) => token(prec(1, /- +/)),
+    listitem_marker: (_) => token(prec(1, /- +/)),
     heading_marker: (_) => token(prec(1, /# +/)),
     quote_marker: (_) => token(prec(1, /> +/)),
     str: (_) => /([^{}\n\\]|\\\{|\\\}|\\)+/,

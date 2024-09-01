@@ -1,33 +1,20 @@
-{meta
-  {title sdoc 语法说明}
-  {tags {l
-     {- doc
-    }
-  }}
-}
+# Block level
 
-{p 每篇 sdoc 文章由一系列 block 构成，block 有这些种类。看起来其实感觉还行，而且缩进不影响结果。
-}
-{l
-   {- paragraph
-  }{- section
-  }{- list
-  }{- heading
-  }
-}
-{p sdoc 支持转义，转义用 \{\} 来表示
-}
-{p sdoc 支持注释，注释必须以 block 形式出现，例如
-}
-{% 这是注释}
-{p sdoc 支持 emphasis、strong 跟 strikethrough，例如：
-}
-{l
-   {- {_ emphasis}
-  }{- {* strong}
-  }{- {~ strikethrough}
-  }
-}
-{p sdoc 支持在开头加入 metadata，每个 metadata 的值可以是一串 block，也可以是一串 inline，见本文档开头。
-}
-{p sdoc 的语法主要参考了 {/ {[] s-exp} https://en.wikipedia.org/wiki/S-expression}
+- list
+
+  We can define list in sdoc.
+
+  - This is a list item
+  - This is multiline list item
+
+    List item is continued using indent.
+
+- quote
+
+  > We can quote something in sdoc.
+
+    Quote is continued using indent.
+
+# Inline level
+
+- {* emphasis}

@@ -1,23 +1,7 @@
-{meta
-  {title sdoc todo}
-  {tags {l
-     {- todo
-    }{- doc
-    }
-  }}
-}
+# sdoc todo
 
-{l
-   {- {x add todo}
-  }{- {~ {o jj}}
-  }{- {x parse softbreak as inline}
-  }{- {x support link}
-  }{- {x support link with label}
-  }{- {o support math}
-  }{- {o support verbatim inline}
-  }{- {o support verbatim block}
-  }{- {o support verbatim in a unified way}
-  }{- {o support attach attribute to inlines}
-  }{- {o support attach attribute to blocks}
-  }
-}
+- todo
+- link
+- math
+- verbatim
+- attribute
