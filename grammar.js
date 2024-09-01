@@ -56,8 +56,8 @@ module.exports = grammar({
     strikethrough: ($) => seq('{~', repeat($._inline), '}'),
 
     listitem_marker: (_) => token(prec(1, /- +/)),
-    tasklistitem_todo_marker: (_) => token(prec(1, '[ ]')),
-    tasklistitem_done_marker: (_) => token(prec(1, '[x]')),
+    tasklistitem_todo_marker: (_) => token(prec(1, /\[ \] +/)),
+    tasklistitem_done_marker: (_) => token(prec(1, /\[x\] +/)),
     heading_marker: (_) => token(prec(1, /# +/)),
     quote_marker: (_) => token(prec(1, /> +/)),
     str: (_) => /([^{}\n\\]|\\\{|\\\}|\\)+/,
