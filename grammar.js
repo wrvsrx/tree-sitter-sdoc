@@ -26,7 +26,11 @@ module.exports = grammar({
       )),
     ),
 
-    _block: ($) => choice($.paragraph, $.list),
+    _block: ($) => choice(
+      $.paragraph,
+      $.list,
+      $.heading,
+    ),
 
     paragraph: ($) => seq(repeat1($._inline), $._paragraph_end),
     list: ($) => repeat1($.listitem),
@@ -37,6 +41,11 @@ module.exports = grammar({
       repeat($.emptyline),
       $._dedent,
     ),
+    heading: ($) => seq(
+      $.heading_marker,
+      repeat($._inline),
+      '\n',
+    ),
 
     _inline: ($) => choice(
       $.str,
@@ -46,6 +55,7 @@ module.exports = grammar({
     emphasis: ($) => seq('{*', repeat($._inline), '}'),
 
     listmark: (_) => token(prec(1, /- +/)),
+    heading_marker: (_) => token(prec(1, /# +/)),
     str: (_) => /([^{}\n\\]|\\\{|\\\}|\\)+/,
     _paragraph_end: (_) => '\n',
   },
