@@ -67,16 +67,21 @@ static Indent current_indent(Indents const *indents);
 
 bool tree_sitter_sdoc_external_scanner_scan(void *payload, TSLexer *lexer,
                                             const bool *valid_symbols) {
+  // we have to devide the scan function into several branched
+  // if we have seq(block1, block2), then block1 should succeed if it consumes something.
+
   State *s = payload;
+
+  // deal with leading spaces
+  // consume nothing if fails
   if (valid_symbols[INDENT_AT_HERE]) {
     if (lexer->get_column(lexer) > current_indent(&(s->indents))) {
       array_push(&(s->indents), lexer->get_column(lexer));
       lexer->result_symbol = INDENT_AT_HERE;
       return true;
     }
-  }
-  lexer->mark_end(lexer);
-  if (lexer->get_column(lexer) == 0) {
+  } else if (lexer->get_column(lexer) == 0) {
+    lexer->mark_end(lexer);
     while (lexer->lookahead == ' ') {
       lexer->advance(lexer, false);
     }
@@ -101,22 +106,6 @@ bool tree_sitter_sdoc_external_scanner_scan(void *payload, TSLexer *lexer,
     if (valid_symbols[IGNORED] && lexer->get_column(lexer) > 0) {
       lexer->result_symbol = IGNORED;
       lexer->mark_end(lexer);
-      return true;
-    }
-  }
-  if (lexer->lookahead == '\n') {
-    lexer->advance(lexer, false);
-    lexer->mark_end(lexer);
-    if (lexer->eof(lexer)) {
-      return false;
-    }
-    // we can say next line is not
-    while (lexer->lookahead == ' ') {
-      lexer->advance(lexer, true);
-    }
-    if (lexer->lookahead != '\n' &&
-        lexer->get_column(lexer) >= current_indent(&(s->indents))) {
-      lexer->result_symbol = SOFTBREAK;
       return true;
     }
   }
@@ -147,7 +136,22 @@ bool tree_sitter_sdoc_external_scanner_scan(void *payload, TSLexer *lexer,
       lexer->mark_end(lexer);
       return true;
     }
-  } else if (s->inline_verbatim_count == 0) {
+  } else if (lexer->lookahead == '\n') {
+    lexer->advance(lexer, false);
+    lexer->mark_end(lexer);
+    if (lexer->eof(lexer)) {
+      return false;
+    }
+    // we can say next line is not
+    while (lexer->lookahead == ' ') {
+      lexer->advance(lexer, true);
+    }
+    if (lexer->lookahead != '\n' &&
+        lexer->get_column(lexer) >= current_indent(&(s->indents))) {
+      lexer->result_symbol = SOFTBREAK;
+      return true;
+    }
+  } else if (lexer->lookahead == '`') {
     Count count = 0;
     while (lexer->lookahead == '`') {
       lexer->advance(lexer, false);
