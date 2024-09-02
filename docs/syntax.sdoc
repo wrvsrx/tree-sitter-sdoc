@@ -1,3 +1,26 @@
+# Features
+
+[x] unorder list
+[ ] ordered list
+[x] todo list
+[ ] link
+[ ] block math
+[ ] block verbatim
+[ ] block attribute
+[ ] block comments
+[ ] metadata
+[ ] div
+
+[ ] inline math
+[ ] inline verbatim
+[ ] inline attribute
+[x] emphasis
+[x] strong
+[x] strikethrough
+[ ] inline comments
+[ ] dict
+[ ] span
+
 # Block level
 
 - list
