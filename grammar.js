@@ -26,7 +26,7 @@ module.exports = grammar({
       repeat($._block),
       $._dedent,
     ),
-    listitem_marker: (_) => token(prec(1, /- +/)),
+    listitem_marker: (_) => /- +/,
 
     tasklist: ($) => prec.right(repeat1($.tasklistitem)),
     tasklistitem: ($) => seq(
@@ -35,8 +35,8 @@ module.exports = grammar({
       repeat($._block),
       $._dedent,
     ),
-    tasklistitem_todo_marker: (_) => token(prec(1, /\[ \] +/)),
-    tasklistitem_done_marker: (_) => token(prec(1, /\[x\] +/)),
+    tasklistitem_todo_marker: (_) => /\[ \] +/,
+    tasklistitem_done_marker: (_) => /\[x\] +/,
     heading: ($) => seq(
       $.heading_marker,
       repeat($._inline),
@@ -64,7 +64,7 @@ module.exports = grammar({
 
     heading_marker: (_) => /# +/,
     quote_marker: (_) => /> +/,
-    _char: (_) => /([^{}\n\\]|\\\{|\\\}|\\)/,
+    _char: (_) => token(prec(-1, /([^{}\n\\]|\\\{|\\\}|\\)/)),
   },
 
   externals: ($) => [
