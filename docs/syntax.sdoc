@@ -26,6 +26,6 @@
 
 # Inline level
 
-- {* strong}
-- {_ emphasis}
-- {~ strikethrough}
+- *{strong}*
+- _{emphasis}_
+- ~{strikethrough}~

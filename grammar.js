@@ -17,7 +17,8 @@ module.exports = grammar({
       $.quote,
     ),
 
-    paragraph: ($) => seq(repeat1($._inline), $._paragraph_end),
+    paragraph: ($) => seq(repeat1($._inline), '\n'),
+
     list: ($) => prec.right(repeat1($.listitem)),
     listitem: ($) => seq(
       $.listitem_marker,
@@ -25,6 +26,8 @@ module.exports = grammar({
       repeat($._block),
       $._dedent,
     ),
+    listitem_marker: (_) => token(prec(1, /- +/)),
+
     tasklist: ($) => prec.right(repeat1($.tasklistitem)),
     tasklistitem: ($) => seq(
       choice($.tasklistitem_done_marker, $.tasklistitem_todo_marker),
@@ -32,11 +35,14 @@ module.exports = grammar({
       repeat($._block),
       $._dedent,
     ),
+    tasklistitem_todo_marker: (_) => token(prec(1, /\[ \] +/)),
+    tasklistitem_done_marker: (_) => token(prec(1, /\[x\] +/)),
     heading: ($) => seq(
       $.heading_marker,
       repeat($._inline),
       '\n',
     ),
+
     quote: ($) => seq(
       $.quote_marker,
       $._indent_at_here,
@@ -51,17 +57,13 @@ module.exports = grammar({
       $.strong,
       $.strikethrough,
     ),
-    emphasis: ($) => seq('{_', repeat($._inline), '}'),
-    strong: ($) => seq('{*', repeat($._inline), '}'),
-    strikethrough: ($) => seq('{~', repeat($._inline), '}'),
+    emphasis: ($) => seq('_{', repeat($._inline), '}_'),
+    strong: ($) => seq('*{', repeat($._inline), '}*'),
+    strikethrough: ($) => seq('~{', repeat($._inline), '}~'),
 
-    listitem_marker: (_) => token(prec(1, /- +/)),
-    tasklistitem_todo_marker: (_) => token(prec(1, /\[ \] +/)),
-    tasklistitem_done_marker: (_) => token(prec(1, /\[x\] +/)),
     heading_marker: (_) => token(prec(1, /# +/)),
     quote_marker: (_) => token(prec(1, /> +/)),
-    str: (_) => /([^{}\n\\]|\\\{|\\\}|\\)+/,
-    _paragraph_end: (_) => '\n',
+    str: (_) => (/([^{}\n\\]|\\\{|\\\}|\\)+/),
   },
 
   externals: ($) => [
