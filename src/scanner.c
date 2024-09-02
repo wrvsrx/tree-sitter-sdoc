@@ -25,6 +25,10 @@ enum TokenType {
   INLINE_VERBATIM_START,
   INLINE_VERBATIM_END,
   INLINE_VERBATIM_CHAR,
+
+  INLINE_MATH_START,
+  INLINE_MATH_END,
+  INLINE_MATH_CHAR,
 };
 
 // --- start of helper macros
@@ -61,6 +65,7 @@ typedef Array(Indent) Indents;
 typedef struct State {
   Indents indents;
   Count inline_verbatim_count;
+  Count inline_math_count;
 } State;
 static Indent current_indent(Indents const *indents);
 // --- end of some declarations
@@ -68,7 +73,8 @@ static Indent current_indent(Indents const *indents);
 bool tree_sitter_sdoc_external_scanner_scan(void *payload, TSLexer *lexer,
                                             const bool *valid_symbols) {
   // we have to devide the scan function into several branched
-  // if we have seq(block1, block2), then block1 should succeed if it consumes something.
+  // if we have seq(block1, block2), then block1 should succeed if it consumes
+  // something.
 
   State *s = payload;
 
@@ -87,11 +93,12 @@ bool tree_sitter_sdoc_external_scanner_scan(void *payload, TSLexer *lexer,
     }
     // first we detect EMPTY_LINE
     if (lexer->lookahead == '\n') {
-      lexer->advance(lexer, false);
-      lexer->mark_end(lexer);
-      assert(valid_symbols[EMPTY_LINE]);
-      lexer->result_symbol = EMPTY_LINE;
-      return true;
+      if (valid_symbols[EMPTY_LINE]) {
+        lexer->advance(lexer, false);
+        lexer->mark_end(lexer);
+        lexer->result_symbol = EMPTY_LINE;
+        return true;
+      }
     }
     // then we detect DEDENT
     Indent const ci = current_indent(&(s->indents));
@@ -103,11 +110,16 @@ bool tree_sitter_sdoc_external_scanner_scan(void *payload, TSLexer *lexer,
       }
     }
     // ignore leading spaces
-    if (valid_symbols[IGNORED] && lexer->get_column(lexer) > 0) {
+    // ensure consume nothing if fails
+    if (lexer->get_column(lexer) > 0) {
       lexer->result_symbol = IGNORED;
       lexer->mark_end(lexer);
       return true;
     }
+  }
+
+  if (lexer->eof(lexer)) {
+    return false;
   }
 
   if (s->inline_verbatim_count > 0) {
@@ -132,6 +144,32 @@ bool tree_sitter_sdoc_external_scanner_scan(void *payload, TSLexer *lexer,
       return true;
     } else {
       lexer->result_symbol = INLINE_VERBATIM_CHAR;
+      lexer->advance(lexer, false);
+      lexer->mark_end(lexer);
+      return true;
+    }
+  } else if (s->inline_math_count > 0) {
+    assert(valid_symbols[INLINE_MATH_CHAR]);
+    assert(valid_symbols[INLINE_MATH_END]);
+    if (lexer->lookahead == '}') {
+      lexer->advance(lexer, false);
+      lexer->mark_end(lexer);
+      Count count = 0;
+      while (lexer->lookahead == '$') {
+        lexer->advance(lexer, false);
+        ++count;
+      }
+
+      if (s->inline_math_count == count) {
+        lexer->result_symbol = INLINE_MATH_END;
+        s->inline_math_count = 0;
+        lexer->mark_end(lexer);
+      } else {
+        lexer->result_symbol = INLINE_MATH_CHAR;
+      }
+      return true;
+    } else {
+      lexer->result_symbol = INLINE_MATH_CHAR;
       lexer->advance(lexer, false);
       lexer->mark_end(lexer);
       return true;
@@ -166,6 +204,21 @@ bool tree_sitter_sdoc_external_scanner_scan(void *payload, TSLexer *lexer,
         return true;
       }
     }
+  } else if (lexer->lookahead == '$') {
+    Count count = 0;
+    while (lexer->lookahead == '$') {
+      lexer->advance(lexer, false);
+      ++count;
+    }
+    if (count > 0 && lexer->lookahead == '{') {
+      if (valid_symbols[INLINE_MATH_START]) {
+        lexer->mark_end(lexer);
+        lexer->advance(lexer, false);
+        s->inline_math_count = count;
+        lexer->result_symbol = INLINE_MATH_START;
+        return true;
+      }
+    }
   }
 
   return false;
@@ -177,6 +230,7 @@ unsigned tree_sitter_sdoc_external_scanner_serialize(void *payload,
   uint32_t size = 0;
   SAVE_ARRAY(buffer, size, (&(s->indents)));
   SAVE_TO_BUFFER(buffer, size, s->inline_verbatim_count);
+  SAVE_TO_BUFFER(buffer, size, s->inline_math_count);
 #ifdef TREE_SITTER_DEBUG
   printf("scanner serialized\n");
 #endif
@@ -187,12 +241,18 @@ void tree_sitter_sdoc_external_scanner_deserialize(void *payload,
                                                    const char *buffer,
                                                    unsigned length) {
   State *s = payload;
+
+  // start init
   array_init(&(s->indents));
   s->inline_verbatim_count = 0;
+  s->inline_math_count = 0;
+  // end init
+
   if (length > 0) {
     uint32_t size = 0;
     LOAD_ARRAY(buffer, size, (&(s->indents)));
     LOAD_FROM_BUFFER(buffer, size, s->inline_verbatim_count);
+    LOAD_FROM_BUFFER(buffer, size, s->inline_math_count);
     assert(size == length);
   }
 #ifdef TREE_SITTER_DEBUG

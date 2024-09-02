@@ -5,6 +5,7 @@
 (strong) @markup.strong
 (strikethrough) @markup.strikethrough
 (inline_verbatim) @markup.raw
+(inline_math) @markup.math
 (quote) @markup.quote
 (quote_marker) @punctuation.special
 (tasklistitem_todo_marker) @markup.list.unchecked

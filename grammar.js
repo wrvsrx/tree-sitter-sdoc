@@ -58,6 +58,7 @@ module.exports = grammar({
       $.strikethrough,
       $.span,
       $.inline_verbatim,
+      $.inline_math,
     ),
     str: ($) => prec.right(repeat1($._char)),
     emphasis: ($) => seq('_{', repeat($._inline), '}_'),
@@ -68,6 +69,11 @@ module.exports = grammar({
       $.inline_verbatim_start,
       alias(repeat($._inline_verbatim_char), $.inline_verbatim_content),
       $.inline_verbatim_end,
+    ),
+    inline_math: ($) => seq(
+      $.inline_math_start,
+      alias(repeat($._inline_math_char), $.inline_math_content),
+      $.inline_math_end,
     ),
 
     heading_marker: (_) => /# +/,
@@ -88,5 +94,9 @@ module.exports = grammar({
     $.inline_verbatim_start,
     $.inline_verbatim_end,
     $._inline_verbatim_char,
+
+    $.inline_math_start,
+    $.inline_math_end,
+    $._inline_math_char,
   ],
 });

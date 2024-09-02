@@ -415,3 +415,32 @@ Inline Verbatim: multiline
       (inline_verbatim_start)
       (inline_verbatim_content)
       (inline_verbatim_end))))
+
+===============================================================================
+Inline Verbatim: incomplete
+===============================================================================
+`{a}
+
+
+-------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline_verbatim
+      (inline_verbatim_start)
+      (inline_verbatim_content)
+      (inline_verbatim_end))))
+
+===============================================================================
+Inline Math: escaped
+===============================================================================
+${\alpha = \beta}$
+
+-------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline_math
+      (inline_math_start)
+      (inline_math_content)
+      (inline_math_end))))

@@ -11,7 +11,7 @@
 [ ] metadata
 [ ] div
 
-[ ] inline math
+[x] inline math
 [x] inline verbatim
 [ ] inline attribute
 [x] emphasis
@@ -47,6 +47,10 @@
 
       We can write explanation for todo item using indent.
 
+- heading
+
+  We can define heading using `{# xxx}`.
+
 # Inline level
 
 - *{strong}*
@@ -54,3 +58,4 @@
 - ~{strikethrough}~
 - {span}
 - `{verbatim}`
+- ${\alpha = \beta * \gamma}$
