@@ -56,11 +56,13 @@ module.exports = grammar({
       $.emphasis,
       $.strong,
       $.strikethrough,
+      $.span,
     ),
     str: ($) => prec.right(repeat1($._char)),
     emphasis: ($) => seq('_{', repeat($._inline), '}_'),
     strong: ($) => seq('*{', repeat($._inline), '}*'),
     strikethrough: ($) => seq('~{', repeat($._inline), '}~'),
+    span: ($) => seq('{', repeat($._inline), '}'),
 
     heading_marker: (_) => /# +/,
     quote_marker: (_) => /> +/,

@@ -19,7 +19,7 @@
 [x] strikethrough
 [ ] inline comments
 [ ] dict
-[ ] span
+[x] span
 
 # Block level
 
@@ -52,3 +52,4 @@
 - *{strong}*
 - _{emphasis}_
 - ~{strikethrough}~
+- {span}
