@@ -14,10 +14,17 @@
 // See `externals` in `grammar.js` for a description of most of them.
 enum TokenType {
   IGNORED,
+
   EMPTY_LINE,
+
   SOFTBREAK,
+
   INDENT_AT_HERE,
   DEDENT,
+
+  INLINE_VERBATIM_START,
+  INLINE_VERBATIM_END,
+  INLINE_VERBATIM_CHAR,
 };
 
 // --- start of helper macros
@@ -49,9 +56,11 @@ enum TokenType {
 
 // --- start of some declarations
 typedef uint16_t Indent;
+typedef uint16_t Count;
 typedef Array(Indent) Indents;
 typedef struct State {
   Indents indents;
+  Count inline_verbatim_count;
 } State;
 static Indent current_indent(Indents const *indents);
 // --- end of some declarations
@@ -66,8 +75,8 @@ bool tree_sitter_sdoc_external_scanner_scan(void *payload, TSLexer *lexer,
       return true;
     }
   }
+  lexer->mark_end(lexer);
   if (lexer->get_column(lexer) == 0) {
-    lexer->mark_end(lexer);
     while (lexer->lookahead == ' ') {
       lexer->advance(lexer, false);
     }
@@ -94,8 +103,8 @@ bool tree_sitter_sdoc_external_scanner_scan(void *payload, TSLexer *lexer,
       lexer->mark_end(lexer);
       return true;
     }
-
-  } else if (lexer->lookahead == '\n') {
+  }
+  if (lexer->lookahead == '\n') {
     lexer->advance(lexer, false);
     lexer->mark_end(lexer);
     if (lexer->eof(lexer)) {
@@ -111,6 +120,50 @@ bool tree_sitter_sdoc_external_scanner_scan(void *payload, TSLexer *lexer,
       return true;
     }
   }
+
+  if (s->inline_verbatim_count > 0) {
+    assert(valid_symbols[INLINE_VERBATIM_CHAR]);
+    assert(valid_symbols[INLINE_VERBATIM_END]);
+    if (lexer->lookahead == '}') {
+      lexer->advance(lexer, false);
+      lexer->mark_end(lexer);
+      Count count = 0;
+      while (lexer->lookahead == '`') {
+        lexer->advance(lexer, false);
+        ++count;
+      }
+
+      if (s->inline_verbatim_count == count) {
+        lexer->result_symbol = INLINE_VERBATIM_END;
+        s->inline_verbatim_count = 0;
+        lexer->mark_end(lexer);
+      } else {
+        lexer->result_symbol = INLINE_VERBATIM_CHAR;
+      }
+      return true;
+    } else {
+      lexer->result_symbol = INLINE_VERBATIM_CHAR;
+      lexer->advance(lexer, false);
+      lexer->mark_end(lexer);
+      return true;
+    }
+  } else if (s->inline_verbatim_count == 0) {
+    Count count = 0;
+    while (lexer->lookahead == '`') {
+      lexer->advance(lexer, false);
+      ++count;
+    }
+    if (count > 0 && lexer->lookahead == '{') {
+      if (valid_symbols[INLINE_VERBATIM_START]) {
+        lexer->mark_end(lexer);
+        lexer->advance(lexer, false);
+        s->inline_verbatim_count = count;
+        lexer->result_symbol = INLINE_VERBATIM_START;
+        return true;
+      }
+    }
+  }
+
   return false;
 }
 
@@ -119,6 +172,7 @@ unsigned tree_sitter_sdoc_external_scanner_serialize(void *payload,
   State *s = payload;
   uint32_t size = 0;
   SAVE_ARRAY(buffer, size, (&(s->indents)));
+  SAVE_TO_BUFFER(buffer, size, s->inline_verbatim_count);
 #ifdef TREE_SITTER_DEBUG
   printf("scanner serialized\n");
 #endif
@@ -128,15 +182,18 @@ unsigned tree_sitter_sdoc_external_scanner_serialize(void *payload,
 void tree_sitter_sdoc_external_scanner_deserialize(void *payload,
                                                    const char *buffer,
                                                    unsigned length) {
-#ifdef TREE_SITTER_DEBUG
-  printf("scanner deserialized\n");
-#endif
   State *s = payload;
   array_init(&(s->indents));
+  s->inline_verbatim_count = 0;
   if (length > 0) {
     uint32_t size = 0;
     LOAD_ARRAY(buffer, size, (&(s->indents)));
+    LOAD_FROM_BUFFER(buffer, size, s->inline_verbatim_count);
+    assert(size == length);
   }
+#ifdef TREE_SITTER_DEBUG
+  printf("scanner deserialized\n");
+#endif
 }
 
 void *tree_sitter_sdoc_external_scanner_create(void) {

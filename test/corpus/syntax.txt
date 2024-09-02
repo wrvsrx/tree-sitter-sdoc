@@ -372,3 +372,31 @@ Quote: muiltiline
     (emptyline)
     (paragraph
       (str))))
+
+===============================================================================
+Inline Verbatim: simple
+===============================================================================
+`{aa}`
+
+-------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline_verbatim
+      (inline_verbatim_start)
+      (inline_verbatim_content)
+      (inline_verbatim_end))))
+
+===============================================================================
+Inline Verbatim: escaped
+===============================================================================
+`{a}}`
+
+-------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (inline_verbatim
+      (inline_verbatim_start)
+      (inline_verbatim_content)
+      (inline_verbatim_end))))

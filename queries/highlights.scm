@@ -4,6 +4,7 @@
 (emphasis) @markup.italic
 (strong) @markup.strong
 (strikethrough) @markup.strikethrough
+(inline_verbatim) @markup.raw
 (quote) @markup.quote
 (quote_marker) @punctuation.special
 (tasklistitem_todo_marker) @markup.list.unchecked

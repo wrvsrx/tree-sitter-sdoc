@@ -57,12 +57,18 @@ module.exports = grammar({
       $.strong,
       $.strikethrough,
       $.span,
+      $.inline_verbatim,
     ),
     str: ($) => prec.right(repeat1($._char)),
     emphasis: ($) => seq('_{', repeat($._inline), '}_'),
     strong: ($) => seq('*{', repeat($._inline), '}*'),
     strikethrough: ($) => seq('~{', repeat($._inline), '}~'),
     span: ($) => seq('{', repeat($._inline), '}'),
+    inline_verbatim: ($) => seq(
+      $.inline_verbatim_start,
+      alias(repeat($._inline_verbatim_char), $.inline_verbatim_content),
+      $.inline_verbatim_end,
+    ),
 
     heading_marker: (_) => /# +/,
     quote_marker: (_) => /> +/,
@@ -71,9 +77,16 @@ module.exports = grammar({
 
   externals: ($) => [
     $._ignored,
+
     $.emptyline,
+
     $.softbreak,
+
     $._indent_at_here,
     $._dedent,
+
+    $.inline_verbatim_start,
+    $.inline_verbatim_end,
+    $._inline_verbatim_char,
   ],
 });
