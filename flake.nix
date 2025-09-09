@@ -17,11 +17,16 @@
         systems = [ "x86_64-linux" ];
         perSystem =
           { pkgs, ... }:
-          let
-            inherit (pkgs) callPackage;
-          in
           rec {
-            packages = callPackage ./. { };
+            packages = rec {
+              generated-src = pkgs.callPackage ./generated-src.nix { };
+              tree-sitter-sdoc = pkgs.tree-sitter.buildGrammar {
+                language = "sdoc";
+                version = "0.0.0";
+                src = generated-src;
+              };
+              vimplugin-treesitter-grammar-sdoc = pkgs.neovimUtils.grammarToPlugin tree-sitter-sdoc;
+            };
             devShells.default = pkgs.mkShell {
               inputsFrom = [
                 packages.tree-sitter-sdoc
