@@ -18,3 +18,4 @@
 /package-lock.json
 /.direnv
 /result
+/.envrc
