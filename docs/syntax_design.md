@@ -2,71 +2,71 @@
 
 This document outlines the syntax for SDOC, an S-expression based markup language designed for note-taking.
 
-## Core Concepts
+## Design Philosophy: Syntax vs. Semantics
 
-SDOC is built on two primary content types:
+SDOC is designed with a strict separation between its syntax and its semantics.
 
-1.  **Implicit Paragraphs:** Plain text that does not require any special markup.
-2.  **Blocks:** Structured content enclosed in curly braces, forming a syntax similar to S-expressions.
+1.  **Syntax Layer (The Parser):** The core Tree-sitter grammar is intentionally simple. Its only job is to recognize two fundamental constructs: S-expressions (`{...}`) and raw text (Literals). The parser does not know the *meaning* of an S-expression; it only knows how to identify its boundaries and its tag.
 
-## Block Syntax
+2.  **Semantic Layer (The Application):** The application or tool that consumes the parse tree is responsible for interpreting the structure. It applies meaning to the S-expressions based on their tags and their position in the document. This layer distinguishes between block elements, inline elements, and attributes.
 
-Blocks are the fundamental structural element in SDOC.
+This separation makes the core parser extremely robust and context-free, while allowing for rich and complex semantics to be built on top.
 
-### General Form
+## Core Syntax
 
-A block consists of an opening fence, a tag name, content, and a closing fence.
+The grammar recognizes only two types of nodes:
 
-```
-{tag_name content}
-```
+-   **S-expression:** An expression enclosed in matching curly braces, starting with a tag. Example: `{p Hello, world!}`
+-   **Literal:** Any raw text outside of an S-expression.
 
-### Fenced Blocks
+### S-expression
 
-To handle nested structures and verbatim content unambiguously, SDOC uses a "fenced block" mechanism. The number of opening curly braces must exactly match the number of closing curly braces.
+-   **Structure:** An S-expression consists of an opening fence, a tag, content, and a closing fence.
+-   **Fences:** To handle nesting, the number of opening braces (`{`) must exactly match the number of closing braces (`}`).
+-   **Tag:** The first element after the opening fence is the `tag`, which is an identifier for the expression.
+-   **Content:** Anything between the tag and the closing fence is the content. The content can be a mix of literals and other S-expressions.
 
--   A block opened with `{` must be closed with `}`.
--   A block opened with `{{` must be closed with `}}`.
--   A block opened with `{{{` must be closed with `}}}`.
--   And so on.
+## Semantic Interpretation
 
-This design allows for robust nesting without the need for escape characters for braces within content.
+The meaning of an S-expression is determined by the application, based on its tag and context.
 
-**Example:**
+### Block vs. Inline Elements
 
-```sdoc
-{{note
-  This is a note.
-  {quote Source: `http://example.com`}
-}}
-```
+-   **Block:** An S-expression at the top level of the document, or nested directly inside another block, is typically interpreted as a block-level element (e.g., a paragraph, a list, a quote).
+-   **Inline:** An S-expression that appears within a line of text is interpreted as an inline element (e.g., for bolding, italics, or links).
+-   **Implicit Paragraphs:** For readability, raw text literals at the top level of the document are treated as paragraphs without needing a `{p ...}` wrapper.
 
-### Tags
+### Attributes
 
-The `tag_name` is an identifier that immediately follows the opening brace fence. It defines the type of the block.
-
--   Tag names consist of alphanumeric characters, underscores (`_`), hashes (`#`), and asterisks (`*`).
--   No whitespace is allowed between the opening fence and the tag name.
-
-## Content Model
-
-The content within a block can be a mix of several types:
-
--   **Nested Blocks:** A block can contain other blocks.
--   **Text:** Plain text content.
--   **Verbatim Content:** Inline text that should be treated literally.
--   **Newlines:** Newlines are preserved within blocks.
-
-### Implicit Paragraphs
-
-Any text that is not part of a block is considered an implicit paragraph. Paragraphs are separated by one or more blank lines.
-
-### Verbatim Inline Content
-
-To include inline content that might contain special characters (such as `{` or `}`), backticks (`` ` ``) are used. The text within the backticks is treated as literal text.
+Attributes are defined using S-expressions. An application can designate certain tags (e.g., `id`, `class`, `lang`) to be interpreted as attributes for their parent S-expression.
 
 **Example:**
 
+Consider the following SDOC text:
+
 ```sdoc
-{code The following is a JSON object: `{"key": "value"}`}
+{div {class "container"} 
+  {p {id "intro"} This is the first paragraph.}
+}
 ```
+
+**Syntactic Parse Tree (Simplified):**
+
+```
+(s_expression (tag: div)
+  (s_expression (tag: class) (literal: "container"))
+  (s_expression (tag: p)
+    (s_expression (tag: id) (literal: "intro"))
+    (literal: "This is the first paragraph.")
+  )
+)
+```
+
+**Semantic Interpretation:**
+
+-   The application sees the outer `{div ...}` S-expression.
+-   It then sees the inner `{class "container"}` expression. Recognizing the `class` tag as a special attribute tag, it assigns the class "container" to the `div` element.
+-   It then sees the `{p ...}` expression and interprets it as a nested block (a paragraph).
+-   Inside the paragraph, it finds an `{id "intro"}` expression, which it interprets as an attribute for the paragraph.
+
+This two-layer design provides a powerful combination of a simple, robust parser and the flexibility to build rich document semantics. 
