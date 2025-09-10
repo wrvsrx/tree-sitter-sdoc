@@ -1,233 +1,61 @@
 ===============================================================================
-Implicit Paragraphs
+Implicit Paragraph
 ===============================================================================
 This is an implicit paragraph.
 
 -------------------------------------------------------------------------------
 
 (document
-  (implicit_paragraph)
+  (text)
   (newline))
 
 ===============================================================================
-Heading Block
+Simple Block
 ===============================================================================
-{# My Document Title}
+{# My Title}
 
 -------------------------------------------------------------------------------
 
 (document
-  (heading_block
-    (tag_name)
-    (text_content)
-    (text_content)
-    (text_content))
+  (block
+    (block_content))
   (newline))
 
 ===============================================================================
-Explicit Paragraph Block
+Fenced Block
 ===============================================================================
-{p This is an explicit paragraph.}
+{{{p My multi-line Fenced Block.}}}
 
 -------------------------------------------------------------------------------
 
 (document
-  (explicit_paragraph_block
-    (tag_name)
-    (text_content)
-    (text_content)
-    (text_content)
-    (text_content)
-    (text_content))
+  (block
+    (block_content))
   (newline))
 
 ===============================================================================
-Simple List
+Fenced Block with Braces in Content
 ===============================================================================
-{list
-  {* Item 1}
-  {* Item 2}
-}
+{{{p My code: `const obj = { a: 1 };` }}}
 
 -------------------------------------------------------------------------------
 
 (document
-  (list_block
-    (tag_name)
-    (newline)
-    (item_block
-      (tag_name)
-      (text_content)
-      (text_content))
-    (newline)
-    (item_block
-      (tag_name)
-      (text_content)
-      (text_content))
-    (newline))
+  (block
+    (block_content))
   (newline))
 
 ===============================================================================
-Nested List
+Nested Blocks
 ===============================================================================
 {l
   {* Item 1}
-  {* Item 2
-    {l
-      {* Nested Item 1}
-      {* Nested Item 2}
-    }
-  }
+  {{* Item 2 with {p a paragraph} inside}}
 }
--------------------------------------------------------------------------------
-
-(document
-  (list_block
-    (tag_name)
-    (newline)
-    (item_block
-      (tag_name)
-      (text_content)
-      (text_content))
-    (newline)
-    (item_block
-      (tag_name)
-      (text_content)
-      (text_content)
-      (newline)
-      (list_block
-        (tag_name)
-        (newline)
-        (item_block
-          (tag_name)
-          (text_content)
-          (text_content)
-          (text_content))
-        (newline)
-        (item_block
-          (tag_name)
-          (text_content)
-          (text_content)
-          (text_content))
-        (newline))
-      (newline))
-    (newline)))
-
-===============================================================================
-Empty List
-===============================================================================
-{list}
 
 -------------------------------------------------------------------------------
 
 (document
-  (list_block
-    (tag_name))
+  (block
+    (block_content))
   (newline))
-
-===============================================================================
-Empty List Item
-===============================================================================
-{list
-  {*}
-}
-
--------------------------------------------------------------------------------
-
-(document
-  (list_block
-    (tag_name)
-    (newline)
-    (item_block
-      (tag_name))
-    (newline))
-  (newline))
-
-===============================================================================
-Mixed Content in List Item
-===============================================================================
-{l
-  {* 
-    Item with text
-    {p and an explicit paragraph.}
-    {l {* and a nested list}}
-  }
-}
-
--------------------------------------------------------------------------------
-
-(document
-  (list_block
-    (tag_name)
-    (newline)
-    (item_block
-      (tag_name)
-      (newline)
-      (text_content)
-      (text_content)
-      (text_content)
-      (newline)
-      (explicit_paragraph_block
-        (tag_name)
-        (text_content)
-        (text_content)
-        (text_content)
-        (text_content))
-      (newline)
-      (list_block
-        (tag_name)
-        (item_block
-          (tag_name)
-          (text_content)
-          (text_content)
-          (text_content)
-          (text_content)))
-      (newline))
-    (newline))
-  (newline))
-
-===============================================================================
-Deeper Nesting (3 levels)
-===============================================================================
-{l
-  {* Level 1
-    {l
-      {* Level 2
-        {l
-          {* Level 3}
-        }
-      }
-    }
-  }
-}
--------------------------------------------------------------------------------
-
-(document
-  (list_block
-    (tag_name)
-    (newline)
-    (item_block
-      (tag_name)
-      (text_content)
-      (text_content)
-      (newline)
-      (list_block
-        (tag_name)
-        (newline)
-        (item_block
-          (tag_name)
-          (text_content)
-          (text_content)
-          (newline)
-          (list_block
-            (tag_name)
-            (newline)
-            (item_block
-              (tag_name)
-              (text_content)
-              (text_content))
-            (newline))
-          (newline))
-        (newline))
-      (newline))
-    (newline)))
