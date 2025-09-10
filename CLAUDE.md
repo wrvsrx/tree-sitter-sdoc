@@ -82,6 +82,10 @@ When modifying the grammar:
 
 ## Testing Guidelines
 
+**WARNING: Do not use `tree-sitter test -u` indiscriminately.**
+
+This command overwrites test cases with the parser's current (and possibly incorrect) output. Before you are confident that the grammar's behavior is correct, do not use it. Otherwise, the tests lose their value as a verification standard. The correct practice is to first manually write the expected parse tree, then run `tree-sitter test` to verify that the grammar produces that result.
+
 - Use tree-sitter corpus format: test cases separated by `===============================================================================`
 - Include both input text and expected parse tree structure
 - Test edge cases: empty tags, nested structures, escaped characters
