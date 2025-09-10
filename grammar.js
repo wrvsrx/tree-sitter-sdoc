@@ -32,31 +32,15 @@ module.exports = grammar({
 
     _content: ($) => choice(
       $.block_element,
-      $.string_literal,
       $.text_content,
       $.newline,
     ),
 
-    // Quoted strings within blocks
-    string_literal: ($) => seq(
-      '"',
-      repeat($._string_char),
-      '"',
-    ),
-
-    // Unquoted text content within blocks
-    text_content: ($) => prec.left(/[^{}"'\n\s]+/),
+    // Text content within blocks (including quotes)
+    text_content: ($) => prec.left(/[^{}\n\s]+/),
 
     // Tag names for block elements
     tag_name: ($) => /[a-zA-Z][a-zA-Z0-9_]*/,
-
-    // Character classes
-    _string_char: ($) => choice(
-      /[^"\\]/,
-      $.escaped_char,
-    ),
-
-    escaped_char: ($) => seq('\\', /./),
 
     newline: ($) => '\n',
   },

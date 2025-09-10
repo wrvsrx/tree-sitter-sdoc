@@ -23,38 +23,38 @@ Plain Text: multiple paragraphs
   (paragraph))
 
 ===============================================================================
-Block Element: simple tag with string
+Block Element: simple tag with text
 ===============================================================================
-{title "标题内容"}
+{title 标题内容}
 
 -------------------------------------------------------------------------------
 
 (document
   (block_element
     (tag_name)
-    (string_literal))
+    (text_content))
   (newline))
 
 ===============================================================================
-Block Element: tag with multiple strings
+Block Element: tag with multiple text parts
 ===============================================================================
-{link "显示文本" "https://example.com"}
+{link 显示文本 https://example.com}
 
 -------------------------------------------------------------------------------
 
 (document
   (block_element
     (tag_name)
-    (string_literal)
-    (string_literal))
+    (text_content)
+    (text_content))
   (newline))
 
 ===============================================================================
 Block Element: nested blocks
 ===============================================================================
 {list
-  {item "第一项"}
-  {item "第二项"}
+  {item 第一项}
+  {item 第二项}
 }
 
 -------------------------------------------------------------------------------
@@ -65,11 +65,11 @@ Block Element: nested blocks
     (newline)
     (block_element
       (tag_name)
-      (string_literal))
+      (text_content))
     (newline)
     (block_element
       (tag_name)
-      (string_literal))
+      (text_content))
     (newline))
   (newline))
 
@@ -78,7 +78,7 @@ Block Element: mixed content with text
 ===============================================================================
 {quote
   这是引用内容。
-  {author "作者名"}
+  {author 作者名}
 }
 
 -------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ Block Element: mixed content with text
     (newline)
     (block_element
       (tag_name)
-      (string_literal))
+      (text_content))
     (newline))
   (newline))
 
@@ -100,7 +100,7 @@ Mixed Content: paragraphs and blocks
 ===============================================================================
 这是普通段落。
 
-{bold "粗体文本"}
+{bold 粗体文本}
 
 另一个段落。
 
@@ -111,7 +111,7 @@ Mixed Content: paragraphs and blocks
   (newline)
   (block_element
     (tag_name)
-    (string_literal))
+    (text_content))
   (newline)
   (newline)
   (paragraph))
@@ -120,9 +120,9 @@ Mixed Content: paragraphs and blocks
 Block Element: complex nesting
 ===============================================================================
 {list
-  {item "项目1"}
-  {item "项目2包含 {bold "粗体"} 文本"}
-  {item "项目3"}
+  {item 项目1}
+  {item 项目2包含 {bold 粗体} 文本}
+  {item 项目3}
 }
 
 -------------------------------------------------------------------------------
@@ -133,33 +133,37 @@ Block Element: complex nesting
     (newline)
     (block_element
       (tag_name)
-      (string_literal))
+      (text_content))
     (newline)
     (block_element
       (tag_name)
-      (string_literal)
       (text_content)
-      (string_literal))
+      (block_element
+        (tag_name)
+        (text_content))
+      (text_content))
     (newline)
     (block_element
       (tag_name)
-      (string_literal))
+      (text_content))
     (newline))
   (newline))
 
 ===============================================================================
-String Literal: with escaped characters
+Text Content: with quotes as regular characters
 ===============================================================================
-{code "function hello() { return \"world\"; }"}
+{code function hello() { return "world"; }}
 
 -------------------------------------------------------------------------------
 
 (document
   (block_element
     (tag_name)
-    (string_literal
-      (escaped_char)
-      (escaped_char)))
+    (text_content)
+    (text_content)
+    (block_element
+      (tag_name)
+      (text_content)))
   (newline))
 
 ===============================================================================
@@ -190,14 +194,14 @@ Text Content: unquoted content in blocks
 ===============================================================================
 Explicit Paragraph: simple paragraph block
 ===============================================================================
-{paragraph "这是显式段落"}
+{paragraph 这是显式段落}
 
 -------------------------------------------------------------------------------
 
 (document
   (block_element
     (tag_name)
-    (string_literal))
+    (text_content))
   (newline))
 
 ===============================================================================
@@ -225,7 +229,7 @@ Mixed Paragraphs: plain text and explicit blocks
 ===============================================================================
 这是纯文本段落。
 
-{paragraph "这是显式段落"}
+{paragraph 这是显式段落}
 
 另一个纯文本段落。
 
@@ -236,7 +240,7 @@ Mixed Paragraphs: plain text and explicit blocks
   (newline)
   (block_element
     (tag_name)
-    (string_literal))
+    (text_content))
   (newline)
   (newline)
   (paragraph))

@@ -3,15 +3,12 @@
 (tag_name) @tag
 
 ; Content types
-(string_literal) @string
 (text_content) @text
 (paragraph) @spell
 
 ; Special characters
 ("{") @punctuation.bracket
 ("}") @punctuation.bracket
-("\"") @punctuation.quote
-(escaped_char) @string.escape
 
 ; Semantic highlighting for common tags
 ((tag_name) @markup.heading
