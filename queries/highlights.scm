@@ -1,12 +1,36 @@
-(heading) @markup.heading
+; S-expression block elements
+(block_element) @markup.block
+(tag_name) @tag
+
+; Content types
+(string_literal) @string
+(text_content) @text
 (paragraph) @spell
-(listitem_marker) @markup.list
-(emphasis) @markup.italic
-(strong) @markup.strong
-(strikethrough) @markup.strikethrough
-(inline_verbatim) @markup.raw
-(inline_math) @markup.math
-(quote) @markup.quote
-(quote_marker) @punctuation.special
-(tasklistitem_todo_marker) @markup.list.unchecked
-(tasklistitem_done_marker) @markup.list.checked
+
+; Special characters
+("{") @punctuation.bracket
+("}") @punctuation.bracket
+("\"") @punctuation.quote
+(escaped_char) @string.escape
+
+; Semantic highlighting for common tags
+((tag_name) @markup.heading
+ (#match? @markup.heading "^(title|heading|h[1-6])$"))
+
+((tag_name) @markup.strong
+ (#match? @markup.strong "^(bold|strong)$"))
+
+((tag_name) @markup.italic
+ (#match? @markup.italic "^(italic|em|emphasis)$"))
+
+((tag_name) @markup.list
+ (#match? @markup.list "^(list|item)$"))
+
+((tag_name) @markup.quote
+ (#match? @markup.quote "^(quote|blockquote)$"))
+
+((tag_name) @markup.raw
+ (#match? @markup.raw "^(code|pre|verbatim)$"))
+
+((tag_name) @markup.link
+ (#match? @markup.link "^(link|url|href)$"))

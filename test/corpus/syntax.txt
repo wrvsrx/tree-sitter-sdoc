@@ -1,446 +1,188 @@
 ===============================================================================
-Paragraph: simple
+Plain Text: simple paragraph
 ===============================================================================
-aaa
+这是一个普通段落。
 
 -------------------------------------------------------------------------------
 
 (document
-  (paragraph
-    (str)))
+  (paragraph))
 
 ===============================================================================
-Paragraph: multiple
+Plain Text: multiple paragraphs
 ===============================================================================
-aaa
+第一个段落。
 
-aaa
+第二个段落。
 
 -------------------------------------------------------------------------------
 
 (document
-  (paragraph
-    (str))
-  (emptyline)
-  (paragraph
-    (str)))
+  (paragraph)
+  (newline)
+  (paragraph))
 
 ===============================================================================
-Paragraph: indentation
+Block Element: simple tag with string
 ===============================================================================
-  aaa
-
-aaa
+{title "标题内容"}
 
 -------------------------------------------------------------------------------
 
 (document
-  (paragraph
-    (str))
-  (emptyline)
-  (paragraph
-    (str)))
+  (block_element
+    (tag_name)
+    (string_literal))
+  (newline))
 
 ===============================================================================
-Paragraph: continuation
+Block Element: tag with multiple strings
 ===============================================================================
-aaa
-aaa
-
-aaa
+{link "显示文本" "https://example.com"}
 
 -------------------------------------------------------------------------------
 
 (document
-  (paragraph
-    (str)
-    (softbreak)
-    (str))
-  (emptyline)
-  (paragraph
-    (str)))
+  (block_element
+    (tag_name)
+    (string_literal)
+    (string_literal))
+  (newline))
 
 ===============================================================================
-Paragraph: paragraph with list marker
+Block Element: nested blocks
 ===============================================================================
-aaa - aaa
+{list
+  {item "第一项"}
+  {item "第二项"}
+}
 
 -------------------------------------------------------------------------------
 
 (document
-  (paragraph
-    (str)))
+  (block_element
+    (tag_name)
+    (newline)
+    (block_element
+      (tag_name)
+      (string_literal))
+    (newline)
+    (block_element
+      (tag_name)
+      (string_literal))
+    (newline))
+  (newline))
 
 ===============================================================================
-List: simple
+Block Element: mixed content with text
 ===============================================================================
-- aaa
+{quote
+  这是引用内容。
+  {author "作者名"}
+}
 
 -------------------------------------------------------------------------------
 
 (document
-  (list
-    (listitem
-      (listitem_marker)
-      (paragraph
-        (str)))))
+  (block_element
+    (tag_name)
+    (newline)
+    (text_content)
+    (newline)
+    (block_element
+      (tag_name)
+      (string_literal))
+    (newline))
+  (newline))
 
 ===============================================================================
-List: list and paragraph
+Mixed Content: paragraphs and blocks
 ===============================================================================
-- a
+这是普通段落。
 
-a
-a
+{bold "粗体文本"}
+
+另一个段落。
 
 -------------------------------------------------------------------------------
 
 (document
-  (list
-    (listitem
-      (listitem_marker)
-      (paragraph
-        (str))
-      (emptyline)))
-  (paragraph
-    (str)
-    (softbreak)
-    (str)))
+  (paragraph)
+  (newline)
+  (block_element
+    (tag_name)
+    (string_literal))
+  (newline)
+  (newline)
+  (paragraph))
 
 ===============================================================================
-List: list with a following paragraph
+Block Element: complex nesting
 ===============================================================================
-- a
-a
-a
+{list
+  {item "项目1"}
+  {item "项目2包含 {bold "粗体"} 文本"}
+  {item "项目3"}
+}
 
 -------------------------------------------------------------------------------
 
 (document
-  (list
-    (listitem
-      (listitem_marker)
-      (paragraph
-        (str))))
-  (paragraph
-    (str)
-    (softbreak)
-    (str)))
+  (block_element
+    (tag_name)
+    (newline)
+    (block_element
+      (tag_name)
+      (string_literal))
+    (newline)
+    (block_element
+      (tag_name)
+      (string_literal)
+      (text_content)
+      (string_literal))
+    (newline)
+    (block_element
+      (tag_name)
+      (string_literal))
+    (newline))
+  (newline))
 
 ===============================================================================
-List: compact multiple listitems
+String Literal: with escaped characters
 ===============================================================================
-- aaa
-- aaa
+{code "function hello() { return \"world\"; }"}
 
 -------------------------------------------------------------------------------
 
 (document
-  (list
-    (listitem
-      (listitem_marker)
-      (paragraph
-        (str)))
-    (listitem
-      (listitem_marker)
-      (paragraph
-        (str)))))
+  (block_element
+    (tag_name)
+    (string_literal
+      (escaped_char)
+      (escaped_char)))
+  (newline))
 
 ===============================================================================
-List: loose multiple listitems
+Block Element: empty tag
 ===============================================================================
-- aaa
-
-- aaa
+{br}
 
 -------------------------------------------------------------------------------
 
 (document
-  (list
-    (listitem
-      (listitem_marker)
-      (paragraph
-        (str))
-      (emptyline))
-    (listitem
-      (listitem_marker)
-      (paragraph
-        (str)))))
+  (block_element
+    (tag_name))
+  (newline))
 
 ===============================================================================
-List: multiple paragraphs in list
+Text Content: unquoted content in blocks
 ===============================================================================
-- aaa
-
-  bb
-
-- aaa
+{note 这是无引号的文本内容}
 
 -------------------------------------------------------------------------------
 
 (document
-  (list
-    (listitem
-      (listitem_marker)
-      (paragraph
-        (str))
-      (emptyline)
-      (paragraph
-        (str))
-      (emptyline))
-    (listitem
-      (listitem_marker)
-      (paragraph
-        (str)))))
-
-===============================================================================
-List: nested list
-===============================================================================
-- aaa
-
-  - aaa
-  - bbb
-
-- aaa
-
--------------------------------------------------------------------------------
-
-(document
-  (list
-    (listitem
-      (listitem_marker)
-      (paragraph
-        (str))
-      (emptyline)
-      (list
-        (listitem
-          (listitem_marker)
-          (paragraph
-            (str)))
-        (listitem
-          (listitem_marker)
-          (paragraph
-            (str))
-          (emptyline))))
-    (listitem
-      (listitem_marker)
-      (paragraph
-        (str)))))
-
-===============================================================================
-List: multiline paragraph in list
-===============================================================================
-- aaa
-  bb
-- aaa
-
--------------------------------------------------------------------------------
-
-(document
-  (list
-    (listitem
-      (listitem_marker)
-      (paragraph
-        (str)
-        (softbreak)
-        (str)))
-    (listitem
-      (listitem_marker)
-      (paragraph
-        (str)))))
-
-===============================================================================
-Emphasis: simple
-===============================================================================
-_{aaa}_
-
--------------------------------------------------------------------------------
-
-(document
-  (paragraph
-    (emphasis
-      (str))))
-
-===============================================================================
-Emphasis: escaped
-===============================================================================
-_\{aaa\}_
-
--------------------------------------------------------------------------------
-
-(document
-  (paragraph
-      (str)))
-
-===============================================================================
-Emphasis: following a string
-===============================================================================
-aaa_{aaa}_
-
--------------------------------------------------------------------------------
-
-(document
-  (paragraph
-      (str)
-      (emphasis
-        (str))))
-
-===============================================================================
-Heading: simple
-===============================================================================
-# aaa
-
--------------------------------------------------------------------------------
-
-(document
-  (heading
-    (heading_marker)
-    (str)))
-
-===============================================================================
-Heading: multiline
-===============================================================================
-# aaa
-aaa
-
--------------------------------------------------------------------------------
-
-(document
-  (heading
-    (heading_marker)
-    (str)
-    (softbreak)
-    (str)))
-
-===============================================================================
-Quote: multiline
-===============================================================================
-> a
-
-a
-
--------------------------------------------------------------------------------
-
-(document
-  (quote
-    (quote_marker)
-    (paragraph
-      (str))
-    (emptyline))
-  (paragraph
-    (str)))
-
-===============================================================================
-Quote: nested
-===============================================================================
-> a
-
-  > a
-
-a
-
--------------------------------------------------------------------------------
-
-(document
-  (quote
-    (quote_marker)
-    (paragraph
-      (str))
-    (emptyline)
-    (quote
-      (quote_marker)
-      (paragraph
-        (str))
-      (emptyline)))
-  (paragraph
-    (str)))
-
-===============================================================================
-Quote: multiline
-===============================================================================
-> a
-
-  b
-
--------------------------------------------------------------------------------
-
-(document
-  (quote
-    (quote_marker)
-    (paragraph
-      (str))
-    (emptyline)
-    (paragraph
-      (str))))
-
-===============================================================================
-Inline Verbatim: simple
-===============================================================================
-`{aa}`
-
--------------------------------------------------------------------------------
-
-(document
-  (paragraph
-    (inline_verbatim
-      (inline_verbatim_start)
-      (inline_verbatim_content)
-      (inline_verbatim_end))))
-
-===============================================================================
-Inline Verbatim: escaped
-===============================================================================
-`{a}}`
-
--------------------------------------------------------------------------------
-
-(document
-  (paragraph
-    (inline_verbatim
-      (inline_verbatim_start)
-      (inline_verbatim_content)
-      (inline_verbatim_end))))
-
-===============================================================================
-Inline Verbatim: multiline
-===============================================================================
-`{a
-}}`
-
--------------------------------------------------------------------------------
-
-(document
-  (paragraph
-    (inline_verbatim
-      (inline_verbatim_start)
-      (inline_verbatim_content)
-      (inline_verbatim_end))))
-
-===============================================================================
-Inline Verbatim: incomplete
-===============================================================================
-`{a}
-
-
--------------------------------------------------------------------------------
-
-(document
-  (paragraph
-    (inline_verbatim
-      (inline_verbatim_start)
-      (inline_verbatim_content)
-      (inline_verbatim_end))))
-
-===============================================================================
-Inline Math: escaped
-===============================================================================
-${\alpha = \beta}$
-
--------------------------------------------------------------------------------
-
-(document
-  (paragraph
-    (inline_math
-      (inline_math_start)
-      (inline_math_content)
-      (inline_math_end))))
+  (block_element
+    (tag_name)
+    (text_content))
+  (newline))
