@@ -34,3 +34,6 @@
 
 ((tag_name) @markup.link
  (#match? @markup.link "^(link|url|href)$"))
+
+((tag_name) @markup.paragraph
+ (#match? @markup.paragraph "^(paragraph|para|p)$"))

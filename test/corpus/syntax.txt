@@ -186,3 +186,57 @@ Text Content: unquoted content in blocks
     (tag_name)
     (text_content))
   (newline))
+
+===============================================================================
+Explicit Paragraph: simple paragraph block
+===============================================================================
+{paragraph "这是显式段落"}
+
+-------------------------------------------------------------------------------
+
+(document
+  (block_element
+    (tag_name)
+    (string_literal))
+  (newline))
+
+===============================================================================
+Explicit Paragraph: multiline paragraph block
+===============================================================================
+{paragraph
+  这是多行显式段落
+  可以包含多行内容
+}
+
+-------------------------------------------------------------------------------
+
+(document
+  (block_element
+    (tag_name)
+    (newline)
+    (text_content)
+    (newline)
+    (text_content)
+    (newline))
+  (newline))
+
+===============================================================================
+Mixed Paragraphs: plain text and explicit blocks
+===============================================================================
+这是纯文本段落。
+
+{paragraph "这是显式段落"}
+
+另一个纯文本段落。
+
+-------------------------------------------------------------------------------
+
+(document
+  (paragraph)
+  (newline)
+  (block_element
+    (tag_name)
+    (string_literal))
+  (newline)
+  (newline)
+  (paragraph))
