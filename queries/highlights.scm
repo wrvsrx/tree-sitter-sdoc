@@ -1,6 +1,8 @@
 ; S-expression block elements
 (heading_block) @markup.block
 (explicit_paragraph_block) @markup.block
+(list_block) @markup.block
+(item_block) @markup.block
 (tag_name) @tag
 
 ; Content types
