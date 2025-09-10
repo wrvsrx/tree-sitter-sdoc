@@ -298,3 +298,71 @@ A paragraph with escaped braces: \{ \}.
     (text_content
       (escaped_char)))
   (newline))
+
+===============================================================================
+Tag Names
+===============================================================================
+{tag_1 with number}
+{my_tag with underscore}
+
+-------------------------------------------------------------------------------
+
+(document
+  (block_element
+    (tag_name)
+    (text_content)
+    (text_content))
+  (newline)
+  (block_element
+    (tag_name)
+    (text_content)
+    (text_content))
+  (newline))
+
+===============================================================================
+Escaped Backslash
+===============================================================================
+I am a literal backslash: \\
+
+{p I am a literal backslash inside a block: \\}
+
+-------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (escaped_char))
+  (newline)
+  (newline)
+  (block_element
+    (tag_name)
+    (text_content)
+    (text_content)
+    (text_content)
+    (text_content)
+    (text_content)
+    (text_content)
+    (text_content)
+    (text_content)
+    (text_content
+      (escaped_char)))
+  (newline))
+
+===============================================================================
+Whitespace Handling
+===============================================================================
+{p 
+  extra  
+  whitespace
+}
+
+-------------------------------------------------------------------------------
+
+(document
+  (block_element
+    (tag_name)
+    (newline)
+    (text_content)
+    (newline)
+    (text_content)
+    (newline))
+  (newline))
