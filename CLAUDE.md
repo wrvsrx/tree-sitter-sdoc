@@ -77,7 +77,7 @@ When modifying the grammar:
 
 1. **Always regenerate** with `tree-sitter generate` after changes
 2. **Update tests** in `test/corpus/syntax.txt` to match new parse trees
-3. **Test thoroughly** - run `tree-sitter test` to ensure all cases pass
+3. **Test thoroughly** - run `tree-sitter generate` and then `tree-sitter test` to ensure all cases pass
 4. **Update highlights** in `queries/highlights.scm` for new node types
 
 ## Testing Guidelines

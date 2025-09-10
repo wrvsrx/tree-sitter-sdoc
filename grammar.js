@@ -1,47 +1,49 @@
 module.exports = grammar({
-  name: "sdoc",
+    name: 'sdoc',
 
-  extras: ($) => [/[ \t]/],
+    extras: $ => [
+        /[ \t]/, // space and tab are extra
+    ],
 
-  rules: {
-    document: ($) => repeat($._element),
+    rules: {
+        document: $ => repeat(
+            choice(
+                $.block_element,
+                $.paragraph,
+                $.newline,
+            )
+        ),
 
-    _element: ($) => choice(
-      $.block_element,
-      $.paragraph,
-      $.newline,
-    ),
+        // A plain text paragraph. It has a low precedence to not conflict with block elements.
+        paragraph: $ => prec(-1,
+            repeat1(choice(
+                /[^\\{}\n]+/,
+                $.escaped_char,
+            ))
+        ),
 
-    // S-expression style block elements
-    block_element: ($) => seq(
-      '{',
-      $.tag_name,
-      repeat($._content),
-      '}',
-    ),
+        block_element: $ => seq(
+            '{',
+            $.tag_name,
+            repeat($._content),
+            '}'
+        ),
 
-    // Plain text paragraphs (no braces required)
-    paragraph: ($) => prec(-1, seq(
-      repeat1($._para_line),
-    )),
+        _content: $ => choice(
+            $.block_element,
+            $.text_content,
+            $.newline,
+        ),
+        
+        text_content: $ => prec.left(repeat1(choice(
+            /[^\\{}\n\s]+/,
+            $.escaped_char,
+        ))),
 
-    _para_line: ($) => seq(
-      /[^{}\n]+/,
-      '\n',
-    ),
+        tag_name: $ => /[a-zA-Z][a-zA-Z0-9_]*/,
 
-    _content: ($) => choice(
-      $.block_element,
-      $.text_content,
-      $.newline,
-    ),
+        escaped_char: $ => token(seq('\\', /./)),
 
-    // Text content within blocks (including quotes)
-    text_content: ($) => prec.left(/[^{}\n\s]+/),
-
-    // Tag names for block elements
-    tag_name: ($) => /[a-zA-Z][a-zA-Z0-9_]*/,
-
-    newline: ($) => '\n',
-  },
+        newline: $ => '\n',
+    }
 });

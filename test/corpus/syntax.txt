@@ -6,7 +6,8 @@ Plain Text: simple paragraph
 -------------------------------------------------------------------------------
 
 (document
-  (paragraph))
+  (paragraph)
+  (newline))
 
 ===============================================================================
 Plain Text: multiple paragraphs
@@ -20,7 +21,9 @@ Plain Text: multiple paragraphs
 (document
   (paragraph)
   (newline)
-  (paragraph))
+  (newline)
+  (paragraph)
+  (newline))
 
 ===============================================================================
 Block Element: simple tag with text
@@ -109,12 +112,14 @@ Mixed Content: paragraphs and blocks
 (document
   (paragraph)
   (newline)
+  (newline)
   (block_element
     (tag_name)
     (text_content))
   (newline)
   (newline)
-  (paragraph))
+  (paragraph)
+  (newline))
 
 ===============================================================================
 Block Element: complex nesting
@@ -238,9 +243,58 @@ Mixed Paragraphs: plain text and explicit blocks
 (document
   (paragraph)
   (newline)
+  (newline)
   (block_element
     (tag_name)
     (text_content))
   (newline)
   (newline)
-  (paragraph))
+  (paragraph)
+  (newline))
+
+===============================================================================
+Deeper Nesting
+===============================================================================
+{a {b {c {d deep}}}}
+
+-------------------------------------------------------------------------------
+
+(document
+  (block_element
+    (tag_name)
+    (block_element
+      (tag_name)
+      (block_element
+        (tag_name)
+        (block_element
+          (tag_name)
+          (text_content)))))
+  (newline))
+
+===============================================================================
+Escaped Delimiters
+===============================================================================
+A paragraph with escaped braces: \{ \}.
+
+{p A block with escaped braces: \{ \}}
+
+-------------------------------------------------------------------------------
+
+(document
+  (paragraph
+    (escaped_char)
+    (escaped_char))
+  (newline)
+  (newline)
+  (block_element
+    (tag_name)
+    (text_content)
+    (text_content)
+    (text_content)
+    (text_content)
+    (text_content)
+    (text_content
+      (escaped_char))
+    (text_content
+      (escaped_char)))
+  (newline))
