@@ -1,368 +1,145 @@
 ===============================================================================
-Plain Text: simple paragraph
+Implicit Paragraphs
 ===============================================================================
-这是一个普通段落。
+This is an implicit paragraph.
 
 -------------------------------------------------------------------------------
-
 (document
-  (paragraph)
+  (implicit_paragraph)
   (newline))
 
 ===============================================================================
-Plain Text: multiple paragraphs
+Multiple Implicit Paragraphs
 ===============================================================================
-第一个段落。
+First implicit paragraph.
 
-第二个段落。
+Second implicit paragraph.
 
 -------------------------------------------------------------------------------
-
 (document
-  (paragraph)
+  (implicit_paragraph)
   (newline)
   (newline)
-  (paragraph)
+  (implicit_paragraph)
   (newline))
 
 ===============================================================================
-Block Element: simple tag with text
+Heading Block
 ===============================================================================
-{title 标题内容}
+{heading My Document Title}
 
 -------------------------------------------------------------------------------
-
 (document
-  (block_element
+  (heading_block
     (tag_name)
-    (text_content))
-  (newline))
-
-===============================================================================
-Block Element: tag with multiple text parts
-===============================================================================
-{link 显示文本 https://example.com}
-
--------------------------------------------------------------------------------
-
-(document
-  (block_element
-    (tag_name)
+    (text_content)
     (text_content)
     (text_content))
   (newline))
 
 ===============================================================================
-Block Element: nested blocks
+Heading Block with Alias
 ===============================================================================
-{list
-  {item 第一项}
-  {item 第二项}
+{# My Document Title}
+
+-------------------------------------------------------------------------------
+(document
+  (heading_block
+    (tag_name)
+    (text_content)
+    (text_content)
+    (text_content))
+  (newline))
+
+===============================================================================
+Explicit Paragraph Block
+===============================================================================
+{paragraph This is an explicit paragraph.}
+
+-------------------------------------------------------------------------------
+(document
+  (explicit_paragraph_block
+    (tag_name)
+    (text_content)
+    (text_content)
+    (text_content)
+    (text_content)
+    (text_content))
+  (newline))
+
+===============================================================================
+Explicit Paragraph Block with Alias
+===============================================================================
+{p This is an explicit paragraph.}
+
+-------------------------------------------------------------------------------
+(document
+  (explicit_paragraph_block
+    (tag_name)
+    (text_content)
+    (text_content)
+    (text_content)
+    (text_content)
+    (text_content))
+  (newline))
+
+===============================================================================
+Multiline Explicit Paragraph
+===============================================================================
+{p
+  This is a multiline
+  explicit paragraph.
 }
 
 -------------------------------------------------------------------------------
-
 (document
-  (block_element
-    (tag_name)
-    (newline)
-    (block_element
-      (tag_name)
-      (text_content))
-    (newline)
-    (block_element
-      (tag_name)
-      (text_content))
-    (newline))
-  (newline))
-
-===============================================================================
-Block Element: mixed content with text
-===============================================================================
-{quote
-  这是引用内容。
-  {author 作者名}
-}
-
--------------------------------------------------------------------------------
-
-(document
-  (block_element
+  (explicit_paragraph_block
     (tag_name)
     (newline)
     (text_content)
-    (newline)
-    (block_element
-      (tag_name)
-      (text_content))
-    (newline))
-  (newline))
-
-===============================================================================
-Mixed Content: paragraphs and blocks
-===============================================================================
-这是普通段落。
-
-{bold 粗体文本}
-
-另一个段落。
-
--------------------------------------------------------------------------------
-
-(document
-  (paragraph)
-  (newline)
-  (newline)
-  (block_element
-    (tag_name)
-    (text_content))
-  (newline)
-  (newline)
-  (paragraph)
-  (newline))
-
-===============================================================================
-Block Element: complex nesting
-===============================================================================
-{list
-  {item 项目1}
-  {item 项目2包含 {bold 粗体} 文本}
-  {item 项目3}
-}
-
--------------------------------------------------------------------------------
-
-(document
-  (block_element
-    (tag_name)
-    (newline)
-    (block_element
-      (tag_name)
-      (text_content))
-    (newline)
-    (block_element
-      (tag_name)
-      (text_content)
-      (block_element
-        (tag_name)
-        (text_content))
-      (text_content))
-    (newline)
-    (block_element
-      (tag_name)
-      (text_content))
-    (newline))
-  (newline))
-
-===============================================================================
-Text Content: with quotes as regular characters
-===============================================================================
-{code function hello() { return "world"; }}
-
--------------------------------------------------------------------------------
-
-(document
-  (block_element
-    (tag_name)
     (text_content)
     (text_content)
-    (block_element
-      (tag_name)
-      (text_content)))
-  (newline))
-
-===============================================================================
-Block Element: empty tag
-===============================================================================
-{br}
-
--------------------------------------------------------------------------------
-
-(document
-  (block_element
-    (tag_name))
-  (newline))
-
-===============================================================================
-Text Content: unquoted content in blocks
-===============================================================================
-{note 这是无引号的文本内容}
-
--------------------------------------------------------------------------------
-
-(document
-  (block_element
-    (tag_name)
-    (text_content))
-  (newline))
-
-===============================================================================
-Explicit Paragraph: simple paragraph block
-===============================================================================
-{paragraph 这是显式段落}
-
--------------------------------------------------------------------------------
-
-(document
-  (block_element
-    (tag_name)
-    (text_content))
-  (newline))
-
-===============================================================================
-Explicit Paragraph: multiline paragraph block
-===============================================================================
-{paragraph
-  这是多行显式段落
-  可以包含多行内容
-}
-
--------------------------------------------------------------------------------
-
-(document
-  (block_element
-    (tag_name)
-    (newline)
     (text_content)
     (newline)
+    (text_content)
     (text_content)
     (newline))
   (newline))
 
 ===============================================================================
-Mixed Paragraphs: plain text and explicit blocks
+Mixed Implicit and Explicit Blocks
 ===============================================================================
-这是纯文本段落。
+This is an implicit paragraph.
 
-{paragraph 这是显式段落}
+{p This is an explicit paragraph.}
 
-另一个纯文本段落。
+Another implicit paragraph.
 
 -------------------------------------------------------------------------------
-
 (document
-  (paragraph)
+  (implicit_paragraph)
   (newline)
   (newline)
-  (block_element
+  (explicit_paragraph_block
     (tag_name)
+    (text_content)
+    (text_content)
+    (text_content)
+    (text_content)
     (text_content))
   (newline)
   (newline)
-  (paragraph)
+  (implicit_paragraph)
   (newline))
 
 ===============================================================================
-Deeper Nesting
+Escaped Characters in Paragraph
 ===============================================================================
-{a {b {c {d deep}}}}
+A paragraph with \{ and \}.
 
 -------------------------------------------------------------------------------
-
 (document
-  (block_element
-    (tag_name)
-    (block_element
-      (tag_name)
-      (block_element
-        (tag_name)
-        (block_element
-          (tag_name)
-          (text_content)))))
-  (newline))
-
-===============================================================================
-Escaped Delimiters
-===============================================================================
-A paragraph with escaped braces: \{ \}.
-
-{p A block with escaped braces: \{ \}}
-
--------------------------------------------------------------------------------
-
-(document
-  (paragraph
+  (implicit_paragraph
     (escaped_char)
     (escaped_char))
-  (newline)
-  (newline)
-  (block_element
-    (tag_name)
-    (text_content)
-    (text_content)
-    (text_content)
-    (text_content)
-    (text_content)
-    (text_content
-      (escaped_char))
-    (text_content
-      (escaped_char)))
-  (newline))
-
-===============================================================================
-Tag Names
-===============================================================================
-{tag_1 with number}
-{my_tag with underscore}
-
--------------------------------------------------------------------------------
-
-(document
-  (block_element
-    (tag_name)
-    (text_content)
-    (text_content))
-  (newline)
-  (block_element
-    (tag_name)
-    (text_content)
-    (text_content))
-  (newline))
-
-===============================================================================
-Escaped Backslash
-===============================================================================
-I am a literal backslash: \\
-
-{p I am a literal backslash inside a block: \\}
-
--------------------------------------------------------------------------------
-
-(document
-  (paragraph
-    (escaped_char))
-  (newline)
-  (newline)
-  (block_element
-    (tag_name)
-    (text_content)
-    (text_content)
-    (text_content)
-    (text_content)
-    (text_content)
-    (text_content)
-    (text_content)
-    (text_content)
-    (text_content
-      (escaped_char)))
-  (newline))
-
-===============================================================================
-Whitespace Handling
-===============================================================================
-{p 
-  extra  
-  whitespace
-}
-
--------------------------------------------------------------------------------
-
-(document
-  (block_element
-    (tag_name)
-    (newline)
-    (text_content)
-    (newline)
-    (text_content)
-    (newline))
   (newline))

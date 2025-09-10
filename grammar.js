@@ -6,31 +6,41 @@ module.exports = grammar({
     ],
 
     rules: {
-        document: $ => repeat(
-            choice(
-                $.block_element,
-                $.paragraph,
-                $.newline,
-            )
+        document: $ => repeat($._element),
+
+        _element: $ => choice(
+            $.heading_block,
+            $.explicit_paragraph_block,
+            $.implicit_paragraph,
+            $.newline,
         ),
 
-        // A plain text paragraph. It has a low precedence to not conflict with block elements.
-        paragraph: $ => prec(-1,
+        // An implicit plain text paragraph.
+        implicit_paragraph: $ => prec(-1,
             repeat1(choice(
                 /[^\\{}\n]+/,
                 $.escaped_char,
             ))
         ),
 
-        block_element: $ => seq(
+        // Heading block: {# ...} or {heading ...}
+        heading_block: $ => seq(
             '{',
-            $.tag_name,
+            alias(choice('#', 'heading'), $.tag_name),
+            repeat($._content),
+            '}'
+        ),
+
+        // Explicit paragraph block: {p ...} or {paragraph ...}
+        explicit_paragraph_block: $ => seq(
+            '{',
+            alias(choice('p', 'paragraph'), $.tag_name),
             repeat($._content),
             '}'
         ),
 
         _content: $ => choice(
-            $.block_element,
+            // TODO: In the future, this could allow more specific nested blocks.
             $.text_content,
             $.newline,
         ),
@@ -39,8 +49,6 @@ module.exports = grammar({
             /[^\\{}\n\s]+/,
             $.escaped_char,
         ))),
-
-        tag_name: $ => /[a-zA-Z][a-zA-Z0-9_]*/,
 
         escaped_char: $ => token(seq('\\', /./)),
 

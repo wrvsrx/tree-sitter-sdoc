@@ -1,10 +1,11 @@
 ; S-expression block elements
-(block_element) @markup.block
+(heading_block) @markup.block
+(explicit_paragraph_block) @markup.block
 (tag_name) @tag
 
 ; Content types
 (text_content) @text
-(paragraph) @spell
+(implicit_paragraph) @spell
 
 ; Special characters
 ("{") @punctuation.bracket
