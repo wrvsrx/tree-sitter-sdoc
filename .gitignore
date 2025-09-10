@@ -19,3 +19,5 @@
 /.direnv
 /result
 /.envrc
+/CMakeLists.txt
+/go.mod
