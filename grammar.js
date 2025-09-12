@@ -11,24 +11,22 @@ module.exports = grammar({
         $._verbatim_content,
         $._implicit_paragraph_start,
         $._implicit_paragraph_end,
-        $._implicit_paragraph_content,
     ],
 
     rules: {
         document: $ => repeat($._element),
 
-        _element_without_paragraph: $ => choice(
-            $.standard_s_expression,
-            $.verbatim,
-            $.text
-        ),
-
         _element: $ => choice(
-            $._element_without_paragraph,
+            $.verbatim,
             $.implicit_paragraph,
+
+            // inline
+            $.character
+
+            $.unknown_name_s_expr,
         ),
 
-        standard_s_expression: $ => seq(
+        unknown_name_s_expr: $ => seq(
             $._standard_s_expression_start,
             $.tag,
             repeat($._element),
@@ -38,7 +36,7 @@ module.exports = grammar({
         implicit_paragraph: $ => seq(
             $._implicit_paragraph_start,
             // implicit paragraphs cannot cannot be nested
-            repeat($._element_without_paragraph),
+            repeat(choice($.verbatim, $.character, $.unknown_name_s_expr)),
             $._implicit_paragraph_end
         ),
 
@@ -49,6 +47,6 @@ module.exports = grammar({
         ),
 
         tag: $ => /[^\s{}]+/,
-        text: $ => /[^\n{}]+/, 
+        character: $ => /[^{}]/, 
     }
 });
