@@ -34,9 +34,11 @@ A block opened with **two or more braces** is a verbatim S-expression. Its conte
 This is the primary mechanism for including content that contains special characters or should not be parsed, such as code snippets.
 
 ```sdoc
-{code {{(defun factorial (n)
+{code {{
+  (defun factorial (n)
     (if (zerop n) 1 
-      (* n (factorial (- n 1))))}}}
+      (* n (factorial (- n 1))))
+}}}
 ```
 
 ### 3. Implicit Paragraph
