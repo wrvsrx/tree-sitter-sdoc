@@ -1,0 +1,44 @@
+@meta
+  @title 示例文档
+  @authors
+    @li wrvsrx
+    @li copilot
+
+这是一行普通的 block，默认为 paragraph。
+
+这也是
+一行普通的段落，必须同一缩进。
+
+这是一个有子 block 的 block
+  
+  子 block 1
+
+  子 block 2
+    子子 block 1
+
+    子子 block 2
+
+@ul
+
+  @caption 这是一个列表
+
+  @li 这是一个 {* 粗体文字}
+  @li 这是一个 {/ 斜体文字}
+  @li 这是一个 {~ 删除字符}
+
+@section
+
+  @heading 我们允许标题
+  这是多行标题的继续
+
+  section 下面的内容必须做出恰当的 indent
+
+  @@code
+
+    这是 code block
+
+    @@ 开头的子块会被当作 verbatim 处理
+
+
+  正常来说，开启新的一段需要两个 newline
+  @paragraph 但是如果前面有显式的 @ 标记，我们可以认为开启了新的一段。
