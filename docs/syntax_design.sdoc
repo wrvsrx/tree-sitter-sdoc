@@ -1,0 +1,71 @@
+@title SDOC Syntax Design
+
+This document outlines the syntax for SDOC, an indentation-based markup language designed for notes and documentation.
+
+@section
+  @heading Design Philosophy
+
+  SDOC is designed with a strict separation between its syntax (the structure) and its semantics (the meaning).
+
+  @ol
+    @li {* Readability First}: The syntax should minimally interfere with reading plain text. Paragraphs are the default element and require no special markup.
+    @li {* Indentation Defines Structure}: The hierarchical structure of the document is determined entirely by text indentation.
+    @li {* Generic Markers}: Simple, consistent markers ({code @}, {code @@}, {code {}}) define the syntactic elements, but their names and meanings are not part of the core syntax.
+
+@section
+  @heading Core Syntax
+
+  The grammar recognizes a few fundamental structures. The meaning of specific tags is determined by the application processing the document, not by the parser itself.
+
+  @subsection
+    @heading 1. Blocks
+
+    Blocks are the primary building units. A block is defined by its indentation level and may have child blocks indented underneath it.
+
+    @ul
+      @li {* Implicit Paragraph Block}: One or more consecutive lines of text not starting with a marker are treated as a single implicit paragraph. This is the default block type. A paragraph ends at a blank line or at the start of a block with a lesser or equal indentation level.
+      @li {* Tagged Block ({code @tagname ...})}: A line starting with {code @} followed by a name defines a tagged block. The tag name can be any alphanumeric string. The block contains all subsequent content at the same indentation level.
+      @li {* Verbatim Block ({code @@tagname ...})}: A line starting with {code @@} defines a verbatim block. The parser treats all content within this block (including indented child blocks) as a single, unparsed string. This is for content like code snippets where special characters must be preserved.
+
+  @subsection
+    @heading 2. Structure and Nesting
+
+    Child blocks are defined by being indented relative to their parent (typically by two spaces). The choice of tag names ({code tag1}, {code tag2}, etc.) is arbitrary and up to the user.
+
+    @@code
+      @block-container
+        @some-heading A Title
+
+        This is a paragraph inside the container.
+
+        @another-block
+          @a-nested-item Item 1
+          @a-nested-item Item 2
+
+  @subsection
+    @heading 3. Inline Elements ({code {marker content}})
+
+    Inline elements are denoted by curly braces to apply styling or semantic meaning to a span of text.
+
+    @ul
+      @li {* Structure}: {code {marker content}}
+      @li The {code marker} is a name or symbol that immediately follows the opening brace, separated from the {code content} by a space. The marker can be a symbolic character (like {code *}, {code /}, {code ~}) or a full word (like {code bold}, {code italic}, {code code}).
+      @li The {code content} is the text to be formatted, which ends at the closing brace {code }}.
+
+    {* Example:}
+    @@code
+      This is {* important}, and this is {italic emphasized}.
+
+    The specific markers and their semantic meaning (e.g., {code *} mapping to "bold", {code italic} mapping to {/ emphasized}) are defined by the consuming application, not the core grammar. This allows for user-defined inline styles.
+
+@section
+  @heading Semantic Interpretation (Application Layer)
+
+  The core parser only produces a structured tree. An application then walks this tree and assigns meaning.
+
+  @ul
+    @li It interprets {code @section} as a section, {code @li} as a list item, etc.
+    @li It maps inline markers like {code *} to {* bold} and {code /} to {/ italic}.
+    @li A convention might be established that a {code @meta} block at the start of a document contains metadata, but this is a semantic rule, not a syntactic one.
+
+  This design keeps the core parser simple and robust while allowing for rich, user-defined document schemas.
